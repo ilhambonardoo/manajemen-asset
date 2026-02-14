@@ -1,0 +1,14 @@
+{
+	"name": "manajemen-asset",
+	"version": "1.0.0",
+	"description": "Asset management system",
+	"scripts": {
+		"format": "prettier --write \"**/*.php\" \"**/*.{js,json,css,md}\""
+	},
+	"devDependencies": {
+		"@prettier/plugin-php": "^0.22.4",
+		"prettier": "^3.8.1"
+	},
+	"author": "Ilham Bonardoo",
+	"license": "MIT"
+}

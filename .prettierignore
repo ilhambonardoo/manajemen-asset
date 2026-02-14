@@ -1,0 +1,17 @@
+builds/
+vendor/
+writable/
+node_modules/
+tests/
+.env
+.git/
+.vscode/
+spark
+composer.lock
+package-lock.json
+composer.json
+phpunit.xml.dist
+preload.php
+LICENSE
+env
+README.md

@@ -1,0 +1,19 @@
+{
+	"tabWidth": 4,
+	"useTabs": true,
+	"semi": true,
+	"singleQuote": true,
+	"trailingComma": "es5",
+	"printWidth": 120,
+	"plugins": ["@prettier/plugin-php"],
+	"overrides": [
+		{
+			"files": ["*.php"],
+			"options": {
+				"tabWidth": 4,
+				"singleQuote": true,
+				"braceStyle": "1tbs"
+			}
+		}
+	]
+}

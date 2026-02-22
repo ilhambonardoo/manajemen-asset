@@ -1,0 +1,204 @@
+<?= $this->extend('layouts/main') ?>
+
+<?= $this->section('content') ?>
+<div class="container-fluid py-4">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h3 text-dark fw-bold">Daftar Aset Tetap</h2>
+        <?php if (in_array(session()->get('role_name'), ['Admin', 'Supervisor', 'Staff Finance'])): ?>
+        <a href="<?= base_url('asset/create') ?>" class="btn btn-warning fw-bold">
+            <i class="fas fa-plus me-1"></i> Tambah Aset Baru
+        </a>
+        <?php endif; ?>
+    </div>
+
+    <?php if (session()->getFlashdata('pesan')): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i> <?= session()->getFlashdata('pesan') ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="tableAssets" class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Kode</th>
+                            <th>Nama Aset</th>
+                            <th>Kategori</th>
+                            <th>Tgl Perolehan</th>
+                            <th>Harga</th>
+                            <th>Umur (Bln)</th>
+                            <th>Lokasi</th>
+                            <th>Status</th>
+                            <th class="text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($assets as $item): ?>
+                        <tr>
+                            <td class="fw-bold text-primary"><?= $item['kode_aset'] ?></td>
+                            <td>
+                                <div class="fw-bold"><?= $item['nama_aset'] ?></div>
+                            </td>
+                            <td><?= ucwords($item['kelompok_aset']) ?></td>
+                            <td><?= date('d M Y', strtotime($item['tanggal_perolehan'])) ?></td>
+                            <td class="fw-bold">
+                                Rp <?= number_format($item['harga_perolehan'], 0, ',', '.') ?>
+                            </td>
+                            <td><?= $item['umur_penyusutan'] ?> Bulan</td>
+                            <td><?= $item['lokasi_aset'] ?></td>
+                            <td>
+                                <?php if ($item['status_aktif'] == 1): ?>
+                                    <span class="badge bg-success">Active</span>
+                                <?php else: ?>
+                                    <span class="badge bg-secondary">Disposed</span>
+                                <?php endif; ?>
+                            </td>
+                            <td class="text-center">
+                                <?php if (
+                                	in_array(session()->get('role_name'), ['Admin', 'Supervisor', 'Staff Finance'])
+                                ): ?>
+                                <a href="<?= base_url(
+                                	'asset/edit/' . $item['id']
+                                ) ?>" class="btn btn-sm btn-outline-primary me-1 mb-1" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="<?= base_url(
+                                	'asset/detail/' . $item['id']
+                                ) ?>" class="btn btn-sm btn-outline-info me-1 mb-1" title="Detail & Kelola Aset">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <?php endif; ?>
+                                
+                                <?php if (in_array($item['id'], $pending_ids)): ?>
+                                    <span class="badge bg-warning text-dark py-2 mb-1" title="Menunggu Approval Admin">
+                                        <i class="fas fa-clock me-1"></i> Pending
+                                    </span>
+
+                                <?php elseif (
+                                	$item['status_aktif'] == 1 &&
+                                	in_array(session()->get('role_name'), ['Admin', 'Supervisor', 'Staff Finance'])
+                                ): ?>
+                                    <button type="button" class="btn btn-sm btn-outline-warning btn-ajukan me-1 mb-1" data-bs-toggle="modal" data-bs-target="#ajukanModal" data-id="<?= $item[
+                                    	'id'
+                                    ] ?>" data-nama="<?= $item['nama_aset'] ?>" title="Ajukan Penjualan/Pelepasan">
+                                        <i class="fas fa-hand-holding-usd"></i>
+                                    </button>
+                                <?php endif; ?>
+
+                                <?php if (session()->get('role_name') == 'Admin'): ?>
+                                <button type="button" class="btn btn-sm btn-outline-danger btn-delete mb-1" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="<?= $item[
+                                	'id'
+                                ] ?>" title="Hapus">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="deleteModalLabel">Konfirmasi Hapus</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Apakah Anda yakin ingin menghapus data aset ini?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <a href="#" id="btn-confirm-delete" class="btn btn-danger">Ya, Hapus!</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="ajukanModal" tabindex="-1" aria-labelledby="ajukanModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-dark">
+                    <h5 class="modal-title fw-bold" id="ajukanModalLabel">Ajukan Penjualan Aset</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="<?= base_url('asset/ajukan') ?>" method="post">
+                    <?= csrf_field() ?>
+                    <div class="modal-body">
+                        <input type="hidden" name="asset_id" id="penjualan_asset_id">
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Nama Aset</label>
+                            <input type="text" class="form-control bg-light" id="penjualan_nama_aset" readonly>
+                            <small class="text-muted">Aset yang akan diajukan untuk dijual/dilepas.</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="tanggal_penjualan" class="form-label fw-bold">Tanggal Pengajuan <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="tanggal_penjualan" name="tanggal_penjualan" value="<?= date(
+                            	'Y-m-d'
+                            ) ?>" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="harga_jual" class="form-label fw-bold">Harga Jual (Rp) <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="harga_jual" name="harga_jual" placeholder="Contoh: 5000000" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="alasan_dijual" class="form-label fw-bold">Alasan Dijual/Dilepas <span class="text-danger">*</span></label>
+                            <textarea class="form-control" id="alasan_dijual" name="alasan_dijual" rows="3" placeholder="Contoh: Barang sudah rusak / Ganti unit baru..." required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-warning fw-bold text-dark">
+                            <i class="fas fa-paper-plane me-1"></i> Kirim Pengajuan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+<?= $this->endSection() ?>
+
+<?= $this->section('scripts') ?>
+<script>
+    $(document).ready(function () {
+        $('#tableAssets').DataTable({
+            "language": {
+                "search": "Cari Aset:",
+                "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ aset"
+            }
+        });
+
+        $('#deleteModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); 
+            var id = button.data('id'); 
+            
+            console.log("ID Aset yang akan dihapus:", id);
+            var deleteUrl = '<?= base_url('asset/delete') ?>/' + id;
+            $(this).find('#btn-confirm-delete').attr('href', deleteUrl);
+        });
+
+        $('#tableAssets tbody').on('click', '.btn-ajukan', function () {
+            var id = $(this).attr('data-id');
+            var nama = $(this).attr('data-nama');
+            
+            $('#penjualan_asset_id').val(id);
+            $('#penjualan_nama_aset').val(nama);
+        });
+    });
+</script>
+<?= $this->endSection() ?>

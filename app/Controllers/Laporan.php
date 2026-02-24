@@ -4,26 +4,31 @@ namespace App\Controllers;
 
 use App\Models\AssetModel;
 
-class Laporan extends BaseController {
+class Laporan extends BaseController
+{
 	protected $assetModel;
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->assetModel = new AssetModel();
 	}
 
-	public function index() {
+	public function index()
+	{
 		$jenis = $this->request->getGet('jenis');
 
 		$data = [
 			'title' => 'Pusat Laporan Aset',
 			'assets' => $this->assetModel->where('status_aktif', 1)->findAll(),
 			'lokasi' => $this->assetModel->select('lokasi_aset')->distinct()->findAll(),
+			'current_jenis' => $jenis,
 		];
 
 		return view('laporan/index', $data);
 	}
 
-	public function preview() {
+	public function preview()
+	{
 		$data = $this->getReportData($this->request);
 		if (!$data) {
 			return '';
@@ -38,7 +43,8 @@ class Laporan extends BaseController {
 		}
 	}
 
-	public function generate() {
+	public function generate()
+	{
 		$action = $this->request->getPost('action');
 		$reportData = $this->getReportData($this->request);
 
@@ -59,7 +65,8 @@ class Laporan extends BaseController {
 		$dompdf->stream($reportData['filename'] . '.pdf', ['Attachment' => true]);
 	}
 
-	private function getReportData($request) {
+	private function getReportData($request)
+	{
 		$jenisLaporan = $request->getPost('jenis_laporan');
 		$dataLaporan = [];
 		$viewLaporan = '';

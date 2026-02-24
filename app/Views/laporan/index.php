@@ -19,29 +19,29 @@
                 <div class="card-body p-4">
                     <form action="<?= base_url('laporan/generate') ?>" method="post">
                         <?= csrf_field() ?>
-                        
+
                         <div class="row g-4">
                             <div class="col-md-4">
                                 <label class="form-label fw-bold">Jenis Laporan <span class="text-danger">*</span></label>
                                 <select class="form-select border-primary" id="jenis_laporan" name="jenis_laporan" required>
                                     <option value="">-- Pilih Laporan --</option>
                                     <option value="keseluruhan" <?= isset($current_jenis) &&
-                                    $current_jenis == 'keseluruhan'
-                                    	? 'selected'
-                                    	: '' ?>>Laporan Aset Tetap Keseluruhan</option>
+                                                                    $current_jenis == 'keseluruhan'
+                                                                    ? 'selected'
+                                                                    : '' ?>>Laporan Aset Tetap Keseluruhan</option>
                                     <option value="kartu_aset" <?= isset($current_jenis) &&
-                                    $current_jenis == 'kartu_aset'
-                                    	? 'selected'
-                                    	: '' ?>>Kartu Aset Tetap (Per Aset)</option>
+                                                                    $current_jenis == 'kartu_aset'
+                                                                    ? 'selected'
+                                                                    : '' ?>>Kartu Aset Tetap (Per Aset)</option>
                                     <option value="jurnal" <?= isset($current_jenis) && $current_jenis == 'jurnal'
-                                    	? 'selected'
-                                    	: '' ?>>Jurnal Penyesuaian Penyusutan</option>
+                                                                ? 'selected'
+                                                                : '' ?>>Jurnal Penyesuaian Penyusutan</option>
                                     <option value="lokasi" <?= isset($current_jenis) && $current_jenis == 'lokasi'
-                                    	? 'selected'
-                                    	: '' ?>>Laporan Aset Per Lokasi</option>
+                                                                ? 'selected'
+                                                                : '' ?>>Laporan Aset Per Lokasi</option>
                                     <option value="nonaktif" <?= isset($current_jenis) && $current_jenis == 'nonaktif'
-                                    	? 'selected'
-                                    	: '' ?>>Laporan Aset Nonaktif (Disposed)</option>
+                                                                    ? 'selected'
+                                                                    : '' ?>>Laporan Aset Nonaktif (Disposed)</option>
                                 </select>
                             </div>
 
@@ -51,23 +51,23 @@
                                     <select name="bulan" class="form-select">
                                         <?php
                                         $bulan_array = [
-                                        	1 => 'Januari',
-                                        	2 => 'Februari',
-                                        	3 => 'Maret',
-                                        	4 => 'April',
-                                        	5 => 'Mei',
-                                        	6 => 'Juni',
-                                        	7 => 'Juli',
-                                        	8 => 'Agustus',
-                                        	9 => 'September',
-                                        	10 => 'Oktober',
-                                        	11 => 'November',
-                                        	12 => 'Desember',
+                                            1 => 'Januari',
+                                            2 => 'Februari',
+                                            3 => 'Maret',
+                                            4 => 'April',
+                                            5 => 'Mei',
+                                            6 => 'Juni',
+                                            7 => 'Juli',
+                                            8 => 'Agustus',
+                                            9 => 'September',
+                                            10 => 'Oktober',
+                                            11 => 'November',
+                                            12 => 'Desember',
                                         ];
                                         foreach ($bulan_array as $key => $val): ?>
                                             <option value="<?= $key ?>" <?= date('n') == $key
-	? 'selected'
-	: '' ?>><?= $val ?></option>
+                                                                            ? 'selected'
+                                                                            : '' ?>><?= $val ?></option>
                                         <?php endforeach;
                                         ?>
                                     </select>
@@ -117,14 +117,12 @@
                     </form>
                 </div>
             </div>
-            
-            <!-- Preview Container -->
+
             <div id="preview-result" class="card shadow-sm border-0 mb-4" style="display:none;">
                 <div class="card-header bg-white py-3 border-bottom">
                     <h6 class="m-0 fw-bold text-primary"><i class="fas fa-table me-1"></i> Preview Laporan</h6>
                 </div>
                 <div class="card-body p-4" id="preview-content">
-                    <!-- Dynamic Content -->
                 </div>
             </div>
 
@@ -138,30 +136,23 @@
     $(document).ready(function() {
         $('#jenis_laporan').change(function() {
             var jenis = $(this).val();
-            
+
             $('.filter-group').hide();
-            
-            if(jenis === 'keseluruhan' || jenis === 'jurnal') {
+
+            if (jenis === 'keseluruhan' || jenis === 'jurnal') {
                 $('#filter_periode').fadeIn();
-            } 
-            else if(jenis === 'kartu_aset') {
+            } else if (jenis === 'kartu_aset') {
                 $('#filter_aset').fadeIn();
-            }
-            else if(jenis === 'lokasi') {
+            } else if (jenis === 'lokasi') {
                 $('#filter_lokasi').fadeIn();
-            }
-            else if(jenis === 'nonaktif') {
-                // No filters needed
-            }
+            } else if (jenis === 'nonaktif') {}
             loadPreview();
         });
 
-        // Trigger changes for filters
         $('select[name="bulan"], input[name="tahun"], select[name="asset_id"], select[name="lokasi"]').change(function() {
             loadPreview();
         });
-        
-        // Also trigger on keyup for year to be responsive
+
         $('input[name="tahun"]').keyup(function() {
             loadPreview();
         });
@@ -173,33 +164,31 @@
                 return;
             }
 
-            // Simple validation before request
-            if(jenis === 'kartu_aset' && !$('select[name="asset_id"]').val()) {
+            if (jenis === 'kartu_aset' && !$('select[name="asset_id"]').val()) {
                 $('#preview-result').hide();
                 return;
             }
-            if(jenis === 'lokasi' && !$('select[name="lokasi"]').val()) {
+            if (jenis === 'lokasi' && !$('select[name="lokasi"]').val()) {
                 $('#preview-result').hide();
                 return;
             }
 
-            // Show loading or similar visual cue could be added here
             $('#preview-content').html('<div class="text-center p-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2 text-muted">Memuat preview...</p></div>');
             $('#preview-result').show();
-            
+
             $.ajax({
                 url: '<?= base_url('laporan/preview') ?>',
                 type: 'POST',
                 data: $('form').serialize(),
                 success: function(response) {
-                    if(response.trim() !== '') {
+                    if (response.trim() !== '') {
                         $('#preview-result').show();
                         var iframe = document.createElement('iframe');
                         iframe.style.width = '100%';
                         iframe.style.height = '600px';
                         iframe.style.border = 'none';
                         $('#preview-content').html(iframe);
-                        
+
                         var doc = iframe.contentWindow.document;
                         doc.open();
                         doc.write(response);
@@ -215,10 +204,15 @@
             });
         }
 
-        // Init preview if value is present
         if ($('#jenis_laporan').val()) {
             $('#jenis_laporan').trigger('change');
         }
+
+        <?php if (!empty($current_jenis)): ?>
+            $(document).ready(function() {
+                $('#jenis_laporan').val('<?= $current_jenis ?>').trigger('change');
+            });
+        <?php endif; ?>
     });
 </script>
 <?= $this->endSection() ?>

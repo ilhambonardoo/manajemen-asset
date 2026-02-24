@@ -4,14 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class PenjualanAssetModel extends Model {
+class PenjualanAssetModel extends Model
+{
 	protected $table = 'penjualan_assets';
 	protected $primaryKey = 'id';
 	protected $useAutoIncrement = true;
 	protected $returnType = 'array';
 	protected $useSoftDeletes = false;
 	protected $protectFields = true;
-	protected $allowedFields = ['asset_id', 'tanggal_penjualan', 'harga_jual', 'alasan_dijual', 'status_approval'];
+	protected $allowedFields = ['asset_id', 'tanggal_penjualan', 'harga_jual', 'alasan_dijual', 'status_approval', 'jenis_pengajuan', 'alasan_penghentian', 'tanggal_pengajuan'];
 
 	protected bool $allowEmptyInserts = false;
 	protected bool $updateOnlyChanged = true;
@@ -43,19 +44,25 @@ class PenjualanAssetModel extends Model {
 	protected $beforeDelete = [];
 	protected $afterDelete = [];
 
-	public function getPendingApprovals() {
-		return $this->db
+	public function getPendingApprovals($jenis = null)
+	{
+		$query = $this->db
 			->table($this->table)
 			->select(
 				'penjualan_assets.*, assets.kode_aset, assets.nama_aset, assets.harga_perolehan, assets.tanggal_perolehan'
 			)
 			->join('assets', 'assets.id = penjualan_assets.asset_id')
-			->where('status_approval', 'Pending')
-			->get()
-			->getResultArray();
+			->where('status_approval', 'Pending');
+
+		if ($jenis) {
+			$query->where('jenis_pengajuan', $jenis);
+		}
+
+		return $query->get()->getResultArray();
 	}
 
-	public function getAllPenjualan() {
+	public function getAllPenjualan()
+	{
 		return $this->db
 			->table($this->table)
 			->select('penjualan_assets.*, assets.kode_aset, assets.nama_aset')

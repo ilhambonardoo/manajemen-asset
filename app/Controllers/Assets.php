@@ -7,18 +7,21 @@ use App\Models\AssetModel;
 use App\Models\PenjualanAssetModel;
 use App\Models\RiwayatLokasiModel;
 
-class Assets extends BaseController {
+class Assets extends BaseController
+{
 	protected $penjualanModel;
 	protected $assetModel;
 	protected $lokasiModel;
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->penjualanModel = new PenjualanAssetModel();
 		$this->assetModel = new AssetModel();
 		$this->lokasiModel = new RiwayatLokasiModel();
 	}
 
-	public function index() {
+	public function index()
+	{
 		$assets = $this->assetModel->orderBy('kode_aset', 'ASC')->findAll();
 		$pendingJualan = $this->penjualanModel->where('status_approval', 'Pending')->findAll();
 		$pendingAssetIds = array_column($pendingJualan, 'asset_id');
@@ -32,7 +35,8 @@ class Assets extends BaseController {
 		return view('assets/daftar', $data);
 	}
 
-	public function create() {
+	public function create()
+	{
 		session();
 		$data = [
 			'title' => 'Tambah Aset Baru',
@@ -46,7 +50,8 @@ class Assets extends BaseController {
 		return view('assets/create', $data);
 	}
 
-	public function store() {
+	public function store()
+	{
 		if (
 			!$this->validate([
 				'kode_aset' => [
@@ -95,7 +100,8 @@ class Assets extends BaseController {
 		return redirect('asset/daftar');
 	}
 
-	public function edit($id) {
+	public function edit($id)
+	{
 		$data = [
 			'title' => 'Edit Data Aset',
 			'validation' => \Config\Services::validation(),
@@ -109,7 +115,8 @@ class Assets extends BaseController {
 		return view('assets/edit', $data);
 	}
 
-	public function update($id) {
+	public function update($id)
+	{
 		$this->assetModel->skipValidation(true);
 
 		$this->assetModel->update($id, [
@@ -127,7 +134,8 @@ class Assets extends BaseController {
 		return redirect()->to('asset/daftar');
 	}
 
-	public function delete($id) {
+	public function delete($id)
+	{
 		$asset = $this->assetModel->find($id);
 		if ($asset) {
 			$this->assetModel->delete($id);
@@ -137,22 +145,34 @@ class Assets extends BaseController {
 		return redirect()->to('asset/daftar');
 	}
 
-	public function ajukan() {
+	public function ajukan()
+	{
+		$jenis_pengajuan = $this->request->getPost('jenis_pengajuan');
+
 		$data = [
 			'asset_id' => $this->request->getPost('asset_id'),
-			'tanggal_penjualan' => $this->request->getPost('tanggal_penjualan'),
-			'harga_jual' => $this->request->getPost('harga_jual'),
-			'alasan_dijual' => $this->request->getPost('alasan_dijual'),
+			'tanggal_pengajuan' => $this->request->getPost('tanggal_penjualan'),
+			'jenis_pengajuan' => $jenis_pengajuan,
 			'status_approval' => 'Pending',
 		];
 
+		if ($jenis_pengajuan === 'penjualan') {
+			$data['tanggal_penjualan'] = $this->request->getPost('tanggal_penjualan');
+			$data['harga_jual'] = $this->request->getPost('harga_jual');
+			$data['alasan_dijual'] = $this->request->getPost('alasan_dijual');
+		} else {
+			$data['alasan_penghentian'] = $this->request->getPost('alasan_dijual');
+		}
+
 		$this->penjualanModel->save($data);
 
-		session()->setFlashdata('pesan', 'Pengajuan penjualan aset berhasil dikirim! Menunggu persetujuan Admin.');
+		$judul = $jenis_pengajuan === 'penjualan' ? 'penjualan' : 'penghentian';
+		session()->setFlashdata('pesan', 'Pengajuan ' . $judul . ' aset berhasil dikirim! Menunggu persetujuan Admin.');
 		return redirect()->to(base_url('asset/daftar'));
 	}
 
-	public function detail($id) {
+	public function detail($id)
+	{
 		$asset = $this->assetModel->find($id);
 		if (!$asset) {
 			session()->setFlashdata('error', 'Data aset tidak ditemukan!');
@@ -168,7 +188,8 @@ class Assets extends BaseController {
 		return view('assets/detail', $data);
 	}
 
-	public function simpanLokasi() {
+	public function simpanLokasi()
+	{
 		$asset_id = $this->request->getPost('asset_id');
 		$lokasi_baru = $this->request->getPost('lokasi_baru');
 

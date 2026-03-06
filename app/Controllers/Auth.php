@@ -59,7 +59,7 @@ class Auth extends BaseController {
 				session()->set($sessionData);
 				return redirect()->to('/dashboard');
 			} else {
-				return redirect()->back()->with('error', 'Password salah.');
+				return redirect()->back()->with('error', 'Username atau password salah.');
 			}
 		} else {
 			return redirect()->back()->with('error', 'Username tidak ditemukan.');

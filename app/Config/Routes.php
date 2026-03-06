@@ -60,7 +60,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 		}
 	);
 
-	$routes->group('lokasi', ['filter' => 'role:Admin,supervisor'], function ($routes) {
+	$routes->group('lokasi', ['filter' => 'role:Admin,Supervisor,Staff Finance'], function ($routes) {
 		$routes->get('', 'LokasiAsset::index');
 		$routes->get('penempatan/(:any)/(:any)', 'LokasiAsset::penempatan/$1/$2');
 		$routes->post('simpan_penempatan', 'LokasiAsset::simpan_penempatan');

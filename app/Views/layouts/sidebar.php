@@ -1,190 +1,176 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4" style="background: linear-gradient(135deg, #1a4d7a 0%, #0d2a47 100%);">
+<aside class="main-sidebar sidebar-dark-primary elevation-4" style="background: linear-gradient(135deg, #1a4d7a 0%, #0d2a47 100%); overflow-y: auto;">
     <?php
     $uri = service('uri');
     $uri->setSilent(true);
+    $segment1 = $uri->getSegment(1);
+    $segment2 = $uri->getSegment(2);
+    $role = session()->get('role_name');
     ?>
-    <a href="/" class="brand-link text-center" style="background: rgba(0,0,0,0.2); border-bottom: 2px solid rgba(255,255,255,0.1);">
+
+    <a href="/" class="brand-link text-center" style="background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.1);">
         <i class="fas fa-building text-warning me-2"></i>
-        <span class="brand-text font-weight-bold" style="font-size: 1.1rem; letter-spacing: 0.5px;">Asset QPON</span>
+        <span class="brand-text font-weight-bold" >Asset QPON</span>
     </a>
 
-    <div class="sidebar">
+    <div class="sidebar px-2">
         <nav class="mt-3">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
-
-                <li class="nav-item mb-1">
-                    <a href="<?= base_url('dashboard') ?>" class="nav-link <?= $uri->getSegment(1) == 'dashboard' ||
-$uri->getSegment(1) == ''
+            <ul class="nav nav-pills nav-sidebar flex-column gap-1" data-widget="treeview" role="menu">
+                
+                <li class="nav-item">
+                    <a href="<?= base_url('dashboard') ?>" class="nav-link <?= $segment1 == 'dashboard' ||
+$segment1 == ''
 	? 'active'
-	: '' ?>" style="border-radius: 8px; margin: 0 10px; transition: all 0.3s ease;">
+	: '' ?>" style="border-radius: 8px; transition: all 0.3s ease;">
                         <i class="nav-icon fas fa-home"></i>
-                        <p class="mb-1">Dashboard</p>
+                        <p>Dashboard</p>
                     </a>
                 </li>
 
-                <?php if (
-                	in_array(session()->get('role_name'), [
-                		'Admin',
-                		'Supervisor',
-                		'Staff Finance',
-                		'Manager',
-                		'Tim China',
-                	])
-                ): ?>
-                    <li class="nav-header" style="margin-top: 20px; color: rgba(255,255,255,0.6); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 15px;">
-                        <i class="fas fa-cogs me-2"></i>Manajemen Aset
+                <?php if (in_array($role, ['Admin', 'Supervisor', 'Staff Finance', 'Manager', 'Tim China'])): ?>
+                    <li class="nav-header" style="color: rgba(255,255,255,0.5); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 15px 10px 5px 15px;">
+                        Manajemen Aset
                     </li>
 
-                    <li class="nav-item mb-1">
-                        <a href="<?= base_url('asset/daftar') ?>" class="nav-link <?= $uri->getSegment(1) == 'asset' &&
-$uri->getSegment(2) == 'daftar'
+                    <li class="nav-item">
+                        <a href="<?= base_url('asset/daftar') ?>" class="nav-link <?= $segment1 == 'asset' &&
+$segment2 == 'daftar'
 	? 'active'
-	: '' ?>" style="border-radius: 8px; margin: 0 10px; transition: all 0.3s ease;">
+	: '' ?>" style="border-radius: 8px; transition: all 0.3s ease;">
                             <i class="nav-icon fas fa-list"></i>
-                            <p class="mb-1">Daftar Aset Tetap</p>
+                            <p>Daftar Aset Tetap</p>
                         </a>
                     </li>
                 <?php endif; ?>
 
-                <?php if (in_array(session()->get('role_name'), ['Admin', 'Supervisor', 'Staff Finance'])): ?>
-                    <li class="nav-item mb-1">
-                        <a href="<?= base_url('lokasi') ?>" class="nav-link <?= $uri->getSegment(1) == 'lokasi'
+                <?php if (in_array($role, ['Admin', 'Supervisor', 'Staff Finance'])): ?>
+                    <li class="nav-item">
+                        <a href="<?= base_url('lokasi') ?>" class="nav-link <?= $segment1 == 'lokasi'
 	? 'active'
-	: '' ?>" style="border-radius: 8px; margin: 0 10px; transition: all 0.3s ease;">
-                            <i class="nav-icon fa-solid fa-map-location-dot"></i>
-                            <p class="ms-2">Lokasi Aset</p>
+	: '' ?>" style="border-radius: 8px; transition: all 0.3s ease;">
+                            <i class="nav-icon fas fa-map-marked-alt"></i>
+                            <p>Lokasi Aset</p>
                         </a>
                     </li>
                 <?php endif; ?>
 
-                <?php if (in_array(session()->get('role_name'), ['Admin', 'Supervisor'])): ?>
-                    <li class="nav-item mb-1">
-                        <a href="<?= base_url('asset/penyusutan') ?>" class="nav-link <?= $uri->getSegment(1) ==
-	'asset' && $uri->getSegment(2) == 'penyusutan'
+                <?php if (in_array($role, ['Admin', 'Supervisor'])): ?>
+                    <li class="nav-item">
+                        <a href="<?= base_url('asset/penyusutan') ?>" class="nav-link <?= $segment1 == 'asset' &&
+$segment2 == 'penyusutan'
 	? 'active'
-	: '' ?>" style="border-radius: 8px; margin: 0 10px; transition: all 0.3s ease;">
+	: '' ?>" style="border-radius: 8px; transition: all 0.3s ease;">
                             <i class="nav-icon fas fa-chart-line"></i>
-                            <p class="mb-1">Penyusutan Aset</p>
+                            <p>Penyusutan Aset</p>
                         </a>
                     </li>
                 <?php endif; ?>
 
-                <?php if (in_array(session()->get('role_name'), ['Admin', 'Manager'])): ?>
-                    <li class="nav-item mb-1">
-                        <a href="javascript:void(0)" class="nav-link <?= $uri->getSegment(1) == 'approval'
+                <?php if (in_array($role, ['Admin', 'Manager'])): ?>
+                    <li class="nav-item <?= $segment1 == 'approval' ? 'menu-open' : '' ?>">
+                        <a href="javascript:void(0)" class="nav-link <?= $segment1 == 'approval'
                         	? 'active'
-                        	: '' ?>" style="border-radius: 8px; margin: 0 10px; transition: all 0.3s ease; cursor: pointer;" onclick="toggleApprovalMenu(event)">
+                        	: '' ?>" style="border-radius: 8px; transition: all 0.3s ease;" onclick="toggleDropdown('approvalMenu', 'arrowApproval')">
                             <i class="nav-icon fas fa-check-circle"></i>
-                            <p class="mb-1">
+                            <p>
                                 Pusat Approval
-                                <i class="right fas fa-angle-up arrow-icon-approval" style="margin-left: auto; transition: transform 0.3s ease;"></i>
+                                <i class="right fas fa-angle-left transition-arrow" id="arrowApproval"></i>
                             </p>
                         </a>
-                        <ul id="approvalMenu" class="nav nav-treeview" style="background: rgba(0,0,0,0.2); border-radius: 8px; margin: 5px 10px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease;">
+                        <ul id="approvalMenu" class="nav nav-treeview dropdown-container">
                             <li class="nav-item">
-                                <a href="<?= base_url(
-                                	'approval?jenis=penjualan'
-                                ) ?>" class="nav-link ms-3 <?= $uri->getSegment(1) == 'approval' &&
-(!isset($_GET['jenis']) || $_GET['jenis'] == 'penjualan')
+                                <a href="<?= base_url('approval?jenis=penjualan') ?>" class="nav-link <?= $segment1 ==
+	'approval' && ($_GET['jenis'] ?? '') == 'penjualan'
 	? 'active'
-	: '' ?>" style="border-radius: 6px; margin: 5px 0;">
-                                    <i class="far fa-circle nav-icon text-success"></i>
-                                    <p class="mb-1">Penjualan Aset</p>
+	: '' ?>">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Penjualan Aset</p>
                                 </a>
                             </li>
-
                             <li class="nav-item">
-                                <a href="<?= base_url(
-                                	'approval?jenis=penghentian'
-                                ) ?>" class="nav-link ms-3 <?= $uri->getSegment(1) == 'approval' &&
-isset($_GET['jenis']) &&
-$_GET['jenis'] == 'penghentian'
+                                <a href="<?= base_url('approval?jenis=penghentian') ?>" class="nav-link <?= ($_GET[
+	'jenis'
+] ??
+	'') ==
+'penghentian'
 	? 'active'
-	: '' ?>" style="border-radius: 6px; margin: 5px 0;">
-                                    <i class="far fa-circle nav-icon text-danger"></i>
-                                    <p class="mb-1">Penghentian Aset</p>
+	: '' ?>">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Penghentian Aset</p>
                                 </a>
                             </li>
                         </ul>
                     </li>
                 <?php endif; ?>
 
-                <li class="nav-header" style="margin-top: 20px; color: rgba(255,255,255,0.6); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 15px;">
-                    <i class="fas fa-file me-2"></i>Jenis Laporan
+                <li class="nav-header" style="color: rgba(255,255,255,0.5); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 15px 10px 5px 15px;">
+                    Laporan
                 </li>
 
-                <li class="nav-item mb-1">
-                    <a href="javascript:void(0)" class="nav-link <?= $uri->getSegment(1) == 'laporan'
+                <li class="nav-item <?= $segment1 == 'laporan' ? 'menu-open' : '' ?>">
+                    <a href="javascript:void(0)" class="nav-link <?= $segment1 == 'laporan'
                     	? 'active'
-                    	: '' ?>" style="border-radius: 8px; margin: 0 10px; transition: all 0.3s ease; cursor: pointer;" onclick="toggleLaporanMenu(event)">
-                        <i class="nav-icon fas fa-file-pdf"></i>
-                        <p class="mb-1">
-                            Laporan
-                            <i class="right fas fa-angle-up arrow-icon" style="margin-left: auto; transition: transform 0.3s ease;"></i>
+                    	: '' ?>" style="border-radius: 8px; transition: all 0.3s ease;" onclick="toggleDropdown('laporanMenu', 'arrowLaporan')">
+                        <i class="nav-icon fas fa-file-alt"></i>
+                        <p>
+                            Jenis Laporan
+                            <i class="right fas fa-angle-left transition-arrow" id="arrowLaporan"></i>
                         </p>
                     </a>
-                    <ul id="laporanMenu" class="nav nav-treeview px-4" style="background: rgba(0,0,0,0.2); border-radius: 5px; margin: 5px 0; max-height: 0; overflow: hidden; transition: max-height 0.3s ease;">
+                    <ul id="laporanMenu" class="nav nav-treeview dropdown-container">
                         <li class="nav-item">
-                            <a href="<?= base_url(
-                            	'laporan?jenis=keseluruhan'
-                            ) ?>" class="nav-link  <?= $uri->getSegment(1) == 'laporan' &&
-(!isset($_GET['jenis']) || $_GET['jenis'] == 'keseluruhan')
+                            <a href="<?= base_url('laporan?jenis=keseluruhan') ?>" class="nav-link <?= $segment1 ==
+	'laporan' &&
+(($_GET['jenis'] ?? '') == 'keseluruhan' || !isset($_GET['jenis']))
 	? 'active'
-	: '' ?>" style="border-radius: 6px; margin: 5px 0;">
-                                <i class="far fa-file nav-icon"></i>
-                                <p class="mb-1">Laporan Keseluruhan</p>
+	: '' ?>">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Laporan Keseluruhan</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('laporan?jenis=jurnal') ?>" class="nav-link <?= $uri->getSegment(1) ==
-	'laporan' &&
-isset($_GET['jenis']) &&
-$_GET['jenis'] == 'jurnal'
+                            <a href="<?= base_url('laporan?jenis=jurnal') ?>" class="nav-link <?= ($_GET['jenis'] ??
+	'') ==
+'jurnal'
 	? 'active'
-	: '' ?>" style="border-radius: 6px; margin: 5px 0;">
-                                <i class="fas fa-chart-bar nav-icon"></i>
+	: '' ?>">
+                                <i class="far fa-circle nav-icon"></i>
                                 <p>Jurnal Penyusutan</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('laporan?jenis=kartu_aset') ?>" class="nav-link <?= $uri->getSegment(
-	1
-) == 'laporan' &&
-isset($_GET['jenis']) &&
-$_GET['jenis'] == 'kartu_aset'
+                            <a href="<?= base_url('laporan?jenis=kartu_aset') ?>" class="nav-link <?= ($_GET['jenis'] ??
+	'') ==
+'kartu_aset'
 	? 'active'
-	: '' ?>" style="border-radius: 6px; margin: 5px 0;">
-                                <i class="fas fa-shopping-cart nav-icon"></i>
+	: '' ?>">
+                                <i class="far fa-circle nav-icon"></i>
                                 <p>Kartu Aset</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('laporan?jenis=lokasi') ?>" class="nav-link mb-5 <?= $uri->getSegment(
-	1
-) == 'laporan' &&
-isset($_GET['jenis']) &&
-$_GET['jenis'] == 'lokasi'
+                            <a href="<?= base_url('laporan?jenis=lokasi') ?>" class="nav-link <?= ($_GET['jenis'] ??
+	'') ==
+'lokasi'
 	? 'active'
-	: '' ?>" style="border-radius: 6px; margin: 5px 0;">
-                                <i class="fas fa-map nav-icon"></i>
-                                <p class="mb-1">Laporan Lokasi</p>
+	: '' ?>">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Laporan Lokasi</p>
                             </a>
                         </li>
                     </ul>
                 </li>
 
-                <?php if (session()->get('role_name') == 'Admin'): ?>
-                    <li class="nav-header" style="margin-top: 20px; color: rgba(255,255,255,0.6); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; padding: 10px 15px;">
-                        <i class="fas fa-tools me-2"></i>Sistem
+                <?php if ($role == 'Admin'): ?>
+                    <li class="nav-header" style="color: rgba(255,255,255,0.5); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 15px 10px 5px 15px;">
+                        Sistem
                     </li>
-
-                    <li class="nav-item mb-1">
-                        <a href="<?= base_url('admin/users') ?>" class="nav-link <?= $uri->getSegment(1) == 'admin' &&
-$uri->getSegment(2) == 'users'
+                    <li class="nav-item">
+                        <a href="<?= base_url('admin/users') ?>" class="nav-link <?= $segment1 == 'admin' &&
+$segment2 == 'users'
 	? 'active'
-	: '' ?>" style="border-radius: 8px; margin: 0 10px; transition: all 0.3s ease;">
+	: '' ?>" style="border-radius: 8px; transition: all 0.3s ease;">
                             <i class="nav-icon fas fa-user-cog"></i>
-                            <p class="mb-1">Kelola Pengguna</p>
+                            <p>Kelola Pengguna</p>
                         </a>
                     </li>
                 <?php endif; ?>
@@ -193,36 +179,44 @@ $uri->getSegment(2) == 'users'
         </nav>
     </div>
 
-    <div class="sidebar-footer border-top" style="padding: 20px 10px;">
+    <div class="sidebar-footer border-top border-secondary mt-auto" style="padding: 15px;">
         <a href="<?= base_url(
         	'logout'
-        ) ?>" class="btn btn-danger btn-sm w-100 d-flex align-items-center justify-content-center gap-2" style="border-radius: 8px; font-weight: 500; transition: all 0.3s ease;">
+        ) ?>" class="btn btn-danger btn-sm w-100 d-flex align-items-center justify-content-center gap-2" style="border-radius: 8px; font-weight: 500; padding: 8px;">
             <i class="fas fa-sign-out-alt"></i>
-            <span>Logout</span>
+            <span>Keluar Aplikasi</span>
         </a>
     </div>
 
-    <link rel="stylesheet" href="<?= base_url('css/sidebar.css') ?>">
-    <script>
-        function toggleLaporanMenu(e) {
-            e.preventDefault();
-            const menu = document.getElementById('laporanMenu');
-            const arrow = document.querySelector('.arrow-icon');
-
-            if (menu.style.maxHeight && menu.style.maxHeight !== '0px') {
-                menu.style.maxHeight = '0px';
-                arrow.classList.remove('rotated');
-            } else {
-                menu.style.maxHeight = menu.scrollHeight + 'px';
-                arrow.classList.add('rotated');
-            }
+    <style>
+        .dropdown-container {
+            background: rgba(0,0,0,0.15);
+            border-radius: 8px;
+            margin: 5px 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
         }
+        .transition-arrow {
+            transition: transform 0.3s ease;
+            margin-left: auto;
+        }
+        .rotated {
+            transform: rotate(-90deg);
+        }
+        .nav-sidebar .nav-link p {
+            margin-bottom: 0 !important;
+        }
+        .nav-treeview .nav-link {
+            padding-left: 2.5rem !important;
+        }
+    </style>
 
-        function toggleApprovalMenu(e) {
-            e.preventDefault();
-            const menu = document.getElementById('approvalMenu');
-            const arrow = document.querySelector('.arrow-icon-approval');
-
+    <script>
+        function toggleDropdown(menuId, arrowId) {
+            const menu = document.getElementById(menuId);
+            const arrow = document.getElementById(arrowId);
+            
             if (menu.style.maxHeight && menu.style.maxHeight !== '0px') {
                 menu.style.maxHeight = '0px';
                 arrow.classList.remove('rotated');
@@ -233,19 +227,15 @@ $uri->getSegment(2) == 'users'
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            const currentPath = window.location.pathname;
-            if (currentPath.includes('/laporan')) {
-                const menu = document.getElementById('laporanMenu');
-                const arrow = document.querySelector('.arrow-icon');
+            const activeLinks = document.querySelectorAll('.nav-treeview .nav-link.active');
+            activeLinks.forEach(link => {
+                const menu = link.closest('.nav-treeview');
+                const parentLink = menu.previousElementSibling;
+                const arrow = parentLink.querySelector('.transition-arrow');
+                
                 menu.style.maxHeight = menu.scrollHeight + 'px';
-                arrow.classList.add('rotated');
-            }
-            if (currentPath.includes('/approval')) {
-                const menu = document.getElementById('approvalMenu');
-                const arrow = document.querySelector('.arrow-icon-approval');
-                menu.style.maxHeight = menu.scrollHeight + 'px';
-                arrow.classList.add('rotated');
-            }
+                if (arrow) arrow.classList.add('rotated');
+            });
         });
     </script>
 </aside>

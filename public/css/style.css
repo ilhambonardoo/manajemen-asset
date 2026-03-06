@@ -15,43 +15,11 @@ body.login-page {
 	justify-content: center;
 }
 
-.login-card {
-	width: 100%;
-	max-width: 400px;
-	background: #ffffff;
-	border-radius: 8px;
-	overflow: hidden;
-	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-	border-top: 8px solid #ffd700;
-}
-
 .card-header {
 	background: #fff;
 	border: none;
 	text-align: center;
 	padding: 20px 0;
-}
-
-.btn-kuning {
-	background-color: #ffd700;
-	color: #000;
-	font-weight: bold;
-	border: none;
-	width: 100%;
-}
-.btn-kuning:hover {
-	background-color: #e6c200;
-}
-
-.footer-text {
-	font-size: 13px;
-	text-align: center;
-	padding-bottom: 20px;
-}
-.footer-text a {
-	color: #555;
-	text-decoration: none;
-	font-weight: 600;
 }
 
 .main-sidebar {
@@ -95,13 +63,12 @@ body.login-page {
 
 .nav-sidebar .nav-link:hover {
 	color: #fff;
-	background-color: rgba(255, 255, 255, 0.1);
 }
 
 .nav-sidebar .nav-link.active {
-	background-color: #ffd700;
-	color: #000;
+	color: #ffd700;
 	font-weight: bold;
+	background-color: transparent;
 }
 
 .nav-icon {
@@ -130,16 +97,6 @@ body.login-page {
 	border: none;
 	border-radius: 0.5rem;
 	margin-bottom: 1rem;
-}
-
-.widget-icon {
-	font-size: 2.5rem;
-}
-.gap-positive {
-	color: #28a745;
-}
-.gap-negative {
-	color: #dc3545;
 }
 
 /* Mobile */
@@ -315,15 +272,11 @@ body.login-page {
 }
 
 .nav-link:hover {
-	background: rgba(255, 255, 255, 0.1) !important;
-	color: #fff !important;
-	transform: translateX(3px);
+	color: #ffffff !important;
 }
 
 .nav-link.active {
-	background: rgba(255, 255, 255, 0.2) !important;
-	color: #fff !important;
-	box-shadow: inset 3px 0 0 #ffc107;
+	color: #ffd700 !important;
 }
 
 .nav-treeview .nav-link {
@@ -331,14 +284,8 @@ body.login-page {
 	font-size: 0.9rem;
 }
 
-.nav-treeview .nav-link:hover {
-	background: rgba(255, 255, 255, 0.15) !important;
-}
-
 .nav-treeview .nav-link.active {
-	background: rgba(255, 255, 255, 0.1) !important;
-	color: #fff !important;
-	box-shadow: inset 3px 0 0 #ffc107;
+	color: #ffd700 !important;
 }
 
 .sidebar-dark-primary {
@@ -351,12 +298,4 @@ body.login-page {
 
 #approvalMenu .nav-link {
 	padding-left: 2rem !important;
-}
-
-.arrow-icon.rotated {
-	transform: rotate(180deg);
-}
-
-.arrow-icon-approval.rotated {
-	transform: rotate(180deg);
 }

@@ -38,7 +38,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $no = 1;
+                        <?php
+                        $no = 1;
                         foreach ($assets as $item): ?>
                             <tr>
                                 <td><?= $no++ ?></td>
@@ -61,43 +62,60 @@
                                     <?php endif; ?>
                                 </td>
                                 <td class="text-center">
-                                    <?php if (
-                                        in_array(session()->get('role_name'), ['Admin', 'Supervisor', 'Staff Finance'])
-                                    ): ?>
-                                        <a href="<?= base_url(
-                                                        'asset/edit/' . $item['id']
-                                                    ) ?>" class="btn btn-sm btn-outline-primary me-1 mb-1" title="Edit">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <a href="<?= base_url(
-                                                        'asset/detail/' . $item['id']
-                                                    ) ?>" class="btn btn-sm btn-outline-info me-1 mb-1" title="Detail & Kelola Aset">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                    <?php endif; ?>
+                                    <div class="d-flex flex-wrap justify-content-center" style="gap: 5px; max-width: 80px; margin: 0 auto;">
+                                        <?php if (
+                                        	in_array(session()->get('role_name'), [
+                                        		'Admin',
+                                        		'Supervisor',
+                                        		'Staff Finance',
+                                        	])
+                                        ): ?>
+                                            <a href="<?= base_url(
+                                            	'asset/edit/' . $item['id']
+                                            ) ?>" class="btn btn-sm btn-outline-primary" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="<?= base_url(
+                                            	'asset/detail/' . $item['id']
+                                            ) ?>" class="btn btn-sm btn-outline-info" title="Detail & Kelola Aset">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                        <?php endif; ?>
 
-                                    <?php if (in_array($item['id'], $pending_ids)): ?>
-                                        <span class="badge bg-warning text-dark py-2 mb-1" title="Menunggu Approval Admin">
-                                            <i class="fas fa-clock me-1"></i> Pending
-                                        </span>
+                                        <?php if (in_array($item['id'], $pending_ids)): ?>
+                                            <span class="badge bg-warning text-dark py-2 w-100" title="Menunggu Approval Admin">
+                                                <i class="fas fa-clock me-1"></i> Pending
+                                            </span>
 
-                                    <?php elseif (
-                                        $item['status_aktif'] == 1 &&
-                                        in_array(session()->get('role_name'), ['Admin', 'Supervisor', 'Staff Finance'])
-                                    ): ?>
-                                        <button type="button" class="btn btn-sm btn-outline-warning btn-ajukan me-1 mb-1" data-bs-toggle="modal" data-bs-target="#ajukanModal" data-id="<?= $item['id'] ?>" data-nama="<?= $item['nama_aset'] ?>" title="Ajukan Penjualan/Pelepasan">
-                                            <i class="fas fa-hand-holding-usd"></i>
-                                        </button>
-                                    <?php endif; ?>
+                                        <?php elseif (
+                                        	$item['status_aktif'] == 1 &&
+                                        	in_array(session()->get('role_name'), [
+                                        		'Admin',
+                                        		'Supervisor',
+                                        		'Staff Finance',
+                                        	])
+                                        ): ?>
+                                            <button type="button" class="btn btn-sm btn-outline-warning btn-ajukan" data-bs-toggle="modal" data-bs-target="#ajukanModal" data-id="<?= $item[
+                                            	'id'
+                                            ] ?>" data-nama="<?= $item[
+	'nama_aset'
+] ?>" title="Ajukan Penjualan/Pelepasan">
+                                                <i class="fas fa-hand-holding-usd"></i>
+                                            </button>
+                                        <?php endif; ?>
 
-                                    <?php if (session()->get('role_name') == 'Admin'): ?>
-                                        <button type="button" class="btn btn-sm btn-outline-danger btn-delete mb-1" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="<?= $item['id'] ?>" title="Hapus">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    <?php endif; ?>
+                                        <?php if (session()->get('role_name') == 'Admin'): ?>
+                                            <button type="button" class="btn btn-sm btn-outline-danger btn-delete" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="<?= $item[
+                                            	'id'
+                                            ] ?>" title="Hapus">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        <?php endif; ?>
+                                    </div>
                                 </td>
                             </tr>
-                        <?php endforeach; ?>
+                        <?php endforeach;
+                        ?>
                     </tbody>
                 </table>
             </div>
@@ -161,8 +179,8 @@
                         <div class="mb-3">
                             <label for="tanggal_penjualan" class="form-label fw-bold">Tanggal Pengajuan <span class="text-danger">*</span></label>
                             <input type="date" class="form-control" id="tanggal_penjualan" name="tanggal_penjualan" value="<?= date(
-                                                                                                                                'Y-m-d'
-                                                                                                                            ) ?>" required>
+                            	'Y-m-d'
+                            ) ?>" required>
                         </div>
 
                         <div class="mb-3" id="harga-jual-section">

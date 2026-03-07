@@ -1,3 +1,4 @@
+
 <?= $this->extend('layouts/main') ?>
 
 <?= $this->section('content') ?>
@@ -15,7 +16,7 @@
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body bg-light rounded">
             <form action="" method="get" class="row g-3 align-items-end">
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <label class="form-label fw-bold">Periode Bulan</label>
                     <select name="bulan" class="form-select">
                         <?php
@@ -26,7 +27,7 @@
                         ?>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <label class="form-label fw-bold">Tahun</label>
                     <input type="number" name="tahun" class="form-control"
                         value="<?= isset($tahun_pilih) ? $tahun_pilih : date('Y') ?>"
@@ -34,7 +35,7 @@
                 </div>
                 <div class="col-md-3">
                     <button type="submit" class="btn btn-primary w-100">
-                        <i class="fas fa-search me-1"></i> Tampilkan Data
+                        <i class="fas fa-filter me-1"></i> Tampilkan Laporan
                     </button>
                 </div>
             </form>
@@ -48,9 +49,6 @@
             <h6 class="m-0 fw-bold text-primary">
                 Data Aset Yang Disusutkan - Periode <?= $bulan_array[$bulan_pilih] ?? '' ?> <?= isset($tahun_pilih) ? $tahun_pilih : date('Y') ?>
             </h6>
-            <small class="text-muted">
-                Menampilkan <?= count($data_penyusutan) > 0 ? (($current_page - 1) * $per_page) + 1 : 0 ?> - <?= ($current_page - 1) * $per_page + count($data_penyusutan) ?> dari <?= $total_assets ?> data
-            </small>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -77,30 +75,20 @@
                     <tbody>
                         <?php if (empty($data_penyusutan)): ?>
                             <tr>
-                                <td colspan="9" class="text-center text-muted py-4">Tidak ada data aset untuk disusutkan.</td>
+                                <td colspan="10" class="text-center text-muted py-4">Tidak ada data aset untuk disusutkan pada periode ini.</td>
                             </tr>
                         <?php else: ?>
                             <?php
-                            $no = (($current_page - 1) * $per_page) + 1;
-                            $pageTotal_accurate = 0;
-                            $pageTotal_kingdee = 0;
-                            $pageTotal_selisih = 0;
+                            $no = 1;
 
                             foreach ($data_penyusutan as $row):
-
-                                $pageTotal_accurate += $row['accurate'];
-                                $pageTotal_kingdee += $row['kingdee'];
-                                $pageTotal_selisih += $row['selisih'];
                             ?>
                                 <tr>
                                     <td class="text-center"><?= $no++ ?></td>
 
                                     <td>
                                         <span class="badge bg-secondary mb-1"><?= $row['kode_aset'] ?></span><br>
-                                        <small class="text-muted" style="font-size: 0.75rem;">Beli: <?= date(
-                                                                                                        'd M Y',
-                                                                                                        strtotime($row['tanggal_beli'])
-                                                                                                    ) ?></small>
+                                        <small class="text-muted" style="font-size: 0.75rem;">Beli: <?= date('d M Y', strtotime($row['tanggal_beli'])) ?></small>
                                     </td>
 
                                     <td class="fw-bold text-dark"><?= $row['nama_aset'] ?></td>
@@ -115,22 +103,10 @@
                                         Rp <?= number_format($row['nilai_buku_kgd'], 0, ',', '.') ?>
                                     </td>
 
-                                    <td class="text-success fw-bold align-middle text-end">Rp <?= number_format(
-                                                                                                    $row['accurate'],
-                                                                                                    0,
-                                                                                                    ',',
-                                                                                                    '.'
-                                                                                                ) ?></td>
-                                    <td class="text-info text-dark fw-bold align-middle text-end">Rp <?= number_format(
-                                                                                                            $row['kingdee'],
-                                                                                                            0,
-                                                                                                            ',',
-                                                                                                            '.'
-                                                                                                        ) ?></td>
+                                    <td class="text-success fw-bold align-middle text-end">Rp <?= number_format($row['accurate'], 0, ',', '.') ?></td>
+                                    <td class="text-info text-dark fw-bold align-middle text-end">Rp <?= number_format($row['kingdee'], 0, ',', '.') ?></td>
 
-                                    <td class="align-middle <?= $row['selisih'] > 0
-                                                                ? 'text-danger'
-                                                                : 'text-success' ?> fw-bold text-end">
+                                    <td class="align-middle <?= $row['selisih'] > 0 ? 'text-danger' : 'text-success' ?> fw-bold text-end">
                                         <?php if ($row['selisih'] > 0): ?>
                                             <i class="fas fa-exclamation-triangle me-1"></i>
                                         <?php endif; ?>
@@ -140,119 +116,43 @@
                             <?php
                             endforeach;
                             ?>
-
-                            <tr class="table-dark fw-bold text-end">
-                                <td colspan="7" class="text-uppercase align-middle text-center border-end border-white">Total Halaman Ini</td>
-                                <td class="align-middle text-center border-end border-white">Rp <?= number_format(
-                                                                                                    $pageTotal_accurate,
-                                                                                                    0,
-                                                                                                    ',',
-                                                                                                    '.'
-                                                                                                ) ?></td>
-                                <td class="align-middle text-center border-end border-white">Rp <?= number_format(
-                                                                                                    $pageTotal_kingdee,
-                                                                                                    0,
-                                                                                                    ',',
-                                                                                                    '.'
-                                                                                                ) ?></td>
-                                <td class="<?= $pageTotal_selisih > 0
-                                                ? 'text-danger'
-                                                : 'text-success' ?> align-middle text-center">
-                                    <?php if ($pageTotal_selisih > 0): ?>
-                                        <i class="fas fa-exclamation-triangle me-1"></i>
-                                    <?php endif; ?>
-                                    Rp <?= number_format($pageTotal_selisih, 0, ',', '.') ?>
-                                </td>
-                            </tr>
-
-                            <tr class="table-warning fw-bold text-end">
-                                <td colspan="7" class="text-uppercase align-middle text-center border-end border-dark">Total Keseluruhan (Semua Periode)</td>
-                                <td class="align-middle text-center border-end border-dark">Rp <?= number_format(
-                                                                                                    $total_accurate,
-                                                                                                    0,
-                                                                                                    ',',
-                                                                                                    '.'
-                                                                                                ) ?></td>
-                                <td class="align-middle text-center border-end border-dark">Rp <?= number_format(
-                                                                                                    $total_kingdee,
-                                                                                                    0,
-                                                                                                    ',',
-                                                                                                    '.'
-                                                                                                ) ?></td>
-                                <td class="<?= $total_selisih > 0
-                                                ? 'text-danger'
-                                                : 'text-success' ?> align-middle text-center border-end border-dark">
-                                    <?php if ($total_selisih > 0): ?>
-                                        <i class="fas fa-exclamation-triangle me-1"></i>
-                                    <?php endif; ?>
-                                    Rp <?= number_format($total_selisih, 0, ',', '.') ?>
-                                </td>
-                            </tr>
                         <?php endif; ?>
                     </tbody>
+                    <?php if (!empty($data_penyusutan)): ?>
+                    <tfoot>
+                        <tr class="table-dark fw-bold text-end">
+                            <td colspan="7" class="text-uppercase align-middle text-center border-end border-light">Total Keseluruhan</td>
+                            <td class="align-middle text-center border-end border-light">Rp <?= number_format($total_accurate, 0, ',', '.') ?></td>
+                            <td class="align-middle text-center border-end border-light">Rp <?= number_format($total_kingdee, 0, ',', '.') ?></td>
+                            <td class="<?= $total_selisih > 0 ? 'text-danger' : 'text-success' ?> align-middle text-center border-end border-dark">
+                                <?php if ($total_selisih > 0): ?>
+                                    <i class="fas fa-exclamation-triangle me-1"></i>
+                                <?php endif; ?>
+                                Rp <?= number_format($total_selisih, 0, ',', '.') ?>
+                            </td>
+                        </tr>
+                    </tfoot>
+                    <?php endif; ?>
                 </table>
             </div>
 
-            <hr class="my-4">
-
-            <?php if ($total_pages > 1): ?>
-                <nav aria-label="Page navigation" class="mt-4">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item <?= $current_page <= 1 ? 'disabled' : '' ?>">
-                            <a class="page-link"
-                                href="?bulan=<?= $bulan_pilih ?>&tahun=<?= $tahun_pilih ?>&page=<?= max(1, $current_page - 1) ?>"
-                                aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span> Sebelumnya
-                            </a>
-                        </li>
-
-                        <?php
-                        $start_page = max(1, $current_page - 2);
-                        $end_page = min($total_pages, $current_page + 2);
-
-                        if ($start_page > 1): ?>
-                            <li class="page-item">
-                                <a class="page-link"
-                                    href="?bulan=<?= $bulan_pilih ?>&tahun=<?= $tahun_pilih ?>&page=1">1</a>
-                            </li>
-                            <?php if ($start_page > 2): ?>
-                                <li class="page-item disabled"><span class="page-link">...</span></li>
-                            <?php endif; ?>
-                        <?php endif; ?>
-
-                        <?php for ($page = $start_page; $page <= $end_page; $page++): ?>
-                            <li class="page-item <?= $page == $current_page ? 'active' : '' ?>">
-                                <a class="page-link"
-                                    href="?bulan=<?= $bulan_pilih ?>&tahun=<?= $tahun_pilih ?>&page=<?= $page ?>">
-                                    <?= $page ?>
-                                </a>
-                            </li>
-                        <?php endfor; ?>
-
-                        <?php if ($end_page < $total_pages): ?>
-                            <?php if ($end_page < $total_pages - 1): ?>
-                                <li class="page-item disabled"><span class="page-link">...</span></li>
-                            <?php endif; ?>
-                            <li class="page-item">
-                                <a class="page-link"
-                                    href="?bulan=<?= $bulan_pilih ?>&tahun=<?= $tahun_pilih ?>&page=<?= $total_pages ?>">
-                                    <?= $total_pages ?>
-                                </a>
-                            </li>
-                        <?php endif; ?>
-
-                        <li class="page-item <?= $current_page >= $total_pages ? 'disabled' : '' ?>">
-                            <a class="page-link"
-                                href="?bulan=<?= $bulan_pilih ?>&tahun=<?= $tahun_pilih ?>&page=<?= min($total_pages, $current_page + 1) ?>"
-                                aria-label="Next">
-                                Berikutnya <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
-            <?php endif; ?>
         </div>
     </div>
+</div>
+<?= $this->endSection() ?>
 
-    </hr>
-    <?= $this->endSection() ?>
+<?= $this->section('scripts') ?>
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            "language": {
+                "search": "Cari Aset:",
+                "lengthMenu": "Tampilkan _MENU_ data per halaman",
+                "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ aset",
+                "infoEmpty": "Tidak ada data tersedia",
+                "zeroRecords": "Tidak ada data yang cocok dengan pencarian"
+            }
+        });
+    });
+</script>
+<?= $this->endSection() ?>

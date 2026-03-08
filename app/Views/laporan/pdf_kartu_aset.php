@@ -6,12 +6,7 @@
 
 <?= $this->section('header_right') ?>
 <h2 class="report-title">KARTU ASET TETAP</h2>
-<table class="report-info" align="right">
-    <tr>
-        <td>Dicetak</td>
-        <td>: <?= date('d F Y') ?></td>
-    </tr>
-</table>
+<p>Dicetak : <?= date('d F Y') ?> </p>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>

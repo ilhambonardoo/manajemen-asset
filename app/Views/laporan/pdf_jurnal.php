@@ -6,16 +6,8 @@
 
 <?= $this->section('header_right') ?>
 <h2 class="report-title">Journal Voucher</h2>
-<table class="report-info" align="right">
-    <tr>
-        <td width="35%" style="text-align:left;">Voucher No.</td>
-        <td>: JV-<?= date('Ymd') ?>-01</td>
-    </tr>
-    <tr>
-        <td style="text-align:left;">Date</td>
-        <td>: <?= date('d M Y', strtotime($data['tanggal_akhir'] ?? date('Y-m-d'))) ?></td>
-    </tr>
-</table>
+<p width="35%" style="text-align:right;">Voucher No : JV-<?= date('Ymd') ?>-01 </p>
+<p style="text-align:right;">Date : <?= date('d M Y', strtotime($data['tanggal_akhir'] ?? date('Y-m-d'))) ?> </p>
 <?= $this->endSection() ?>
 
 <?php

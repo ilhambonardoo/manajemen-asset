@@ -6,16 +6,8 @@
 
 <?= $this->section('header_right') ?>
 <h2 class="report-title">LAPORAN ASET TETAP</h2>
-<table class="report-info" align="right">
-    <tr>
-        <td>Periode</td>
-        <td>: <?= isset($tanggal_akhir) ? $tanggal_akhir : (isset($tanggal) ? $tanggal : date('d F Y')) ?></td>
-    </tr>
-    <tr>
-        <td>Dicetak</td>
-        <td>: <?= date('d F Y') ?></td>
-    </tr>
-</table>
+<p>Periode : <?= isset($tanggal_akhir) ? $tanggal_akhir : (isset($tanggal) ? $tanggal : date('d F Y')) ?> </p>
+<p>Dicetak : <?= date('d F Y') ?></p>
 <?= $this->endSection() ?>
 
 <?= $this->section('content') ?>

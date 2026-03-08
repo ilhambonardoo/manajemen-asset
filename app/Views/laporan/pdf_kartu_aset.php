@@ -43,6 +43,43 @@
     }
 </style>
 
+<?php 
+    $hargaPerolehan = $data['harga_perolehan'];
+    $umurPenyusutan = $data['umur_penyusutan'];
+    $tanggal_perolehan = $data['tanggal_perolehan'];
+
+    $tahunSekarang = date('Y');
+    $bulanSekarang = date('m');
+
+    $tahunPerolehan = date('Y', strtotime($tanggal_perolehan));
+    $bulanPerolehan = date('m', strtotime($tanggal_perolehan));
+
+    $bulanBerjalan = ((($tahunSekarang-$tahunPerolehan) * 12) + ($bulanSekarang - $bulanPerolehan));
+
+    if($bulanBerjalan > $umurPenyusutan){
+        $bulanBerjalan = $umurPenyusutan;
+    }
+
+    if($bulanBerjalan < 0){
+        $bulanBerjalan = 0;
+    }
+
+    $sisaUmur = $umurPenyusutan - $bulanBerjalan;
+
+
+    if($umurPenyusutan != 0){
+        $tarifPenyusutan = $hargaPerolehan / $umurPenyusutan;
+        $totalPenyusutan = $tarifPenyusutan * $bulanBerjalan;
+
+        $nilaiBuku = $hargaPerolehan - $totalPenyusutan;
+    } else {
+      $tarifPenyusutan = 0;
+      $totalPenyusutan = 0;
+      $nilaiBuku = $hargaPerolehan - $totalPenyusutan;  
+    }
+
+?>
+
 <div class="card-box">
     <table class="info-table" style="border: none; margin: 0;">
         <tr>
@@ -55,7 +92,7 @@
         </tr>
         <tr>
             <th>Kategori / Kelompok</th>
-            <td><?= $data['kelompok_aset'] ?? '-' ?></td>
+            <td class="text-capitalize"><?= $data['kelompok_aset'] ?? '-' ?></td>
         </tr>
         <tr>
             <th>Tanggal Perolehan</th>
@@ -72,6 +109,22 @@
         <tr>
             <th>Umur Penyusutan</th>
             <td><?= $data['umur_penyusutan'] ?? '0' ?> Bulan</td>
+        </tr>
+        <tr>
+            <th>Umur Berjalan</th>
+            <td><?= $bulanBerjalan; ?></td>
+        </tr>
+        <tr>
+            <th>Sisa Umur</th>
+            <td><?= $sisaUmur; ?></td>
+        </tr>
+        <tr>
+            <th>Total Akumulasi Penyusutan</th>
+            <td>(Rp <?= number_format($totalPenyusutan, 0, ',', '.'); ?>)</td>
+        </tr>
+        <tr>
+            <th>Nilai Buku Saat Ini</th>
+            <td>(Rp <?= number_format($nilaiBuku, 0, ',' , '.') ?>)</td>
         </tr>
         <tr>
             <th>Lokasi Aset</th>

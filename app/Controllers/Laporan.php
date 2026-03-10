@@ -67,6 +67,7 @@ class Laporan extends BaseController
 		$dompdf->setPaper('A4', 'landscape');
 		$dompdf->render();
 		$dompdf->stream($reportData['filename'] . '.pdf', ['Attachment' => true]);
+		exit;
 	}
 
 	private function hitungPenyusutanBulanan($assets, $targetDate){
@@ -128,27 +129,35 @@ class Laporan extends BaseController
 				$targetDateStr = $tahunPilih . '-' . sprintf('%02d', $bulanPilih) . '-01';
 				$tanggalAkhirBulan = date('t F Y', strtotime($targetDateStr));
 
-				$dataLaporan = $this->assetModel->where('status_aktif', 1)->findAll();
+				$dataLaporan = [
+					'data' => $this->assetModel->where('status_aktif', 1)->findAll()
+				];
 				$viewLaporan = 'laporan/pdf_keseluruhan';
 				$namaFile = 'Laporan_Aset_Keseluruhan_' . date('Ymd');
 			break;
 
 			case 'kartu_aset':
 				$assetId = $request->getPost('asset_id');
-				$dataLaporan = $this->assetModel->find($assetId);
+				$dataLaporan = [
+					'asset' => $this->assetModel->find($assetId)
+				];
 				$viewLaporan = 'laporan/pdf_kartu_aset';
-				$namaFile = 'Kartu_Aset_' . ($dataLaporan['kode_aset'] ?? 'Unknown');
+				$namaFile = 'Kartu_Aset_' . ($dataLaporan['asset']['kode_aset'] ?? 'Unknown');
 			break;
 
 			case 'lokasi':
 				$lokasiPilih = $request->getPost('lokasi');
-				$dataLaporan = $this->assetModel->where('lokasi_aset', $lokasiPilih)->findAll();
+				$dataLaporan = [
+					'data' => $this->assetModel->where('lokasi_aset', $lokasiPilih)->findAll()
+				];
 				$viewLaporan = 'laporan/pdf_lokasi';
 				$namaFile = 'Laporan_Aset_Lokasi_' . str_replace(' ', '_', $lokasiPilih);
 			break;
 
 			case 'nonaktif':
-				$dataLaporan = $this->assetModel->where('status_aktif', 0)->findAll();
+				$dataLaporan = [
+					'data' => $this->assetModel->where('status_aktif', 0)->findAll()
+				];
 				$viewLaporan = 'laporan/pdf_nonaktif';
 				$namaFile = 'Laporan_Aset_Nonaktif_' . date('Ymd');
 			break;

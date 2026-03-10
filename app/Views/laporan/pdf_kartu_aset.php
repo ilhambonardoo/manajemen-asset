@@ -39,9 +39,9 @@
 </style>
 
 <?php 
-    $hargaPerolehan = $data['harga_perolehan'];
-    $umurPenyusutan = $data['umur_penyusutan'];
-    $tanggal_perolehan = $data['tanggal_perolehan'];
+    $hargaPerolehan = $asset['harga_perolehan'];
+    $umurPenyusutan = $asset['umur_penyusutan'];
+    $tanggal_perolehan = $asset['tanggal_perolehan'];
 
     $tahunSekarang = date('Y');
     $bulanSekarang = date('m');
@@ -79,31 +79,31 @@
     <table class="info-table" style="border: none; margin: 0;">
         <tr>
             <th>Kode Aset</th>
-            <td class="fw-bold"><?= $data['kode_aset'] ?? '-' ?></td>
+            <td class="fw-bold"><?= $asset['kode_aset'] ?? '-' ?></td>
         </tr>
         <tr>
             <th>Nama Aset</th>
-            <td class="fw-bold"><?= $data['nama_aset'] ?? '-' ?></td>
+            <td class="fw-bold"><?= $asset['nama_aset'] ?? '-' ?></td>
         </tr>
         <tr>
             <th>Kategori / Kelompok</th>
-            <td class="text-capitalize"><?= $data['kelompok_aset'] ?? '-' ?></td>
+            <td class="text-capitalize"><?= $asset['kelompok_aset'] ?? '-' ?></td>
         </tr>
         <tr>
             <th>Tanggal Perolehan</th>
-            <td><?= isset($data['tanggal_perolehan'])
-            	? date('d F Y', strtotime($data['tanggal_perolehan']))
+            <td><?= isset($asset['tanggal_perolehan'])
+            	? date('d F Y', strtotime($asset['tanggal_perolehan']))
             	: '-' ?></td>
         </tr>
         <tr>
             <th>Harga Perolehan</th>
-            <td>Rp <?= isset($data['harga_perolehan'])
-            	? number_format($data['harga_perolehan'], 0, ',', '.')
+            <td>Rp <?= isset($asset['harga_perolehan'])
+            	? number_format($asset['harga_perolehan'], 0, ',', '.')
             	: '0' ?></td>
         </tr>
         <tr>
             <th>Umur Penyusutan</th>
-            <td><?= $data['umur_penyusutan'] ?? '0' ?> Bulan</td>
+            <td><?= $asset['umur_penyusutan'] ?? '0' ?> Bulan</td>
         </tr>
         <tr>
             <th>Umur Berjalan</th>
@@ -123,20 +123,20 @@
         </tr>
         <tr>
             <th>Lokasi Aset</th>
-            <td><?= $data['lokasi_aset'] ?? '-' ?></td>
+            <td><?= $asset['lokasi_aset'] ?? '-' ?></td>
         </tr>
         <tr>
             <th>Satuan</th>
-            <td><?= $data['satuan'] ?? '-' ?></td>
+            <td><?= $asset['satuan'] ?? '-' ?></td>
         </tr>
         <tr>
             <th>Status Aset</th>
             <td>
-                <?php if (isset($data['status_aktif'])): ?>
-                    <span style="padding: 3px 8px; border-radius: 3px; background-color: <?= $data['status_aktif'] == 1
+                <?php if (isset($asset['status_aktif'])): ?>
+                    <span style="padding: 3px 8px; border-radius: 3px; background-color: <?= $asset['status_aktif'] == 1
                     	? '#d4edda'
                     	: '#f8d7da' ?>;">
-                        <?= $data['status_aktif'] == 1 ? 'AKTIF' : 'NONAKTIF (DISPOSED)' ?>
+                        <?= $asset['status_aktif'] == 1 ? 'AKTIF' : 'NONAKTIF (DISPOSED)' ?>
                     </span>
                 <?php else: ?>
                     -
@@ -148,8 +148,8 @@
 
 <div class="description-box">
     <p class="fw-bold" style="margin-bottom: 5px;">Deskripsi / Spesifikasi:</p>
-    <p style="margin: 0; line-height: 1.5;"><?= !empty($data['spesifikasi'])
-    	? nl2br($data['spesifikasi'])
+    <p style="margin: 0; line-height: 1.5;"><?= !empty($asset['spesifikasi'])
+    	? nl2br($asset['spesifikasi'])
     	: 'Tidak ada deskripsi tambahan.' ?></p>
 </div>
 <?= $this->endSection() ?>

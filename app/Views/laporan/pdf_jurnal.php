@@ -7,7 +7,7 @@
 <?= $this->section('header_right') ?>
 <h2 class="report-title">Journal Voucher</h2>
 <p width="35%" style="text-align:right;">Voucher No : JV-<?= date('Ymd') ?>-01 </p>
-<p style="text-align:right;">Date : <?= date('d M Y', strtotime($data['tanggal_akhir'] ?? date('Y-m-d'))) ?> </p>
+<p style="text-align:right;">Date : <?= date('d M Y', strtotime($tanggal_akhir ?? date('Y-m-d'))) ?> </p>
 <?= $this->endSection() ?>
 
 <?php
@@ -90,7 +90,7 @@ function terbilang($angka)
         </tr>
     </thead>
     <tbody>
-        <?php if (empty($data['jurnal'])): ?>
+        <?php if (empty($jurnal)): ?>
             <tr>
                 <td colspan="5" class="text-center">Tidak ada aset yang disusutkan pada periode ini.</td>
             </tr>
@@ -98,7 +98,7 @@ function terbilang($angka)
             <?php
             $kode_beban = 6000;
             $kode_akumulasi = 1500;
-            foreach ($data['jurnal'] as $kategori => $nominal):
+            foreach ($jurnal as $kategori => $nominal):
 
                 $kode_beban++;
                 $kode_akumulasi++;
@@ -110,7 +110,7 @@ function terbilang($angka)
                     <td class="text-right">0</td>
                     <td>Penyusutan <?= $kategori ?> periode <?= date(
                                                                 'M Y',
-                                                                strtotime($data['tanggal_akhir'] ?? date('Y-m-d'))
+                                                                strtotime($tanggal_akhir ?? date('Y-m-d'))
                                                             ) ?></td>
                 </tr>
                 <tr>
@@ -120,7 +120,7 @@ function terbilang($angka)
                     <td class="text-right"><?= number_format($nominal, 0, ',', '.') ?></td>
                     <td>Penyusutan <?= $kategori ?> periode <?= date(
                                                                 'M Y',
-                                                                strtotime($data['tanggal_akhir'] ?? date('Y-m-d'))
+                                                                strtotime($tanggal_akhir ?? date('Y-m-d'))
                                                             ) ?></td>
                 </tr>
             <?php
@@ -128,9 +128,9 @@ function terbilang($angka)
             ?>
 
             <tr>
-                <td colspan="2" class="fw-bold">Terbilang: <i><?= ucfirst(terbilang($data['total_jurnal'] ?? 0)) ?> rupiah</i></td>
-                <td class="text-right fw-bold"><?= number_format($data['total_jurnal'] ?? 0, 0, ',', '.') ?></td>
-                <td class="text-right fw-bold"><?= number_format($data['total_jurnal'] ?? 0, 0, ',', '.') ?></td>
+                <td colspan="2" class="fw-bold">Terbilang: <i><?= ucfirst(terbilang($total_jurnal ?? 0)) ?> rupiah</i></td>
+                <td class="text-right fw-bold"><?= number_format($total_jurnal ?? 0, 0, ',', '.') ?></td>
+                <td class="text-right fw-bold"><?= number_format($total_jurnal ?? 0, 0, ',', '.') ?></td>
                 <td></td>
             </tr>
         <?php endif; ?>
@@ -141,7 +141,7 @@ function terbilang($angka)
     <p class="fw-bold" style="margin-bottom: 5px;">Description</p>
     <p style="margin: 0;">Pencatatan Jurnal Penyesuaian Beban Penyusutan Aset Tetap Perusahaan untuk periode <?= date(
                                                                                                                     'F Y',
-                                                                                                                    strtotime($data['tanggal_akhir'] ?? date('Y-m-d'))
+                                                                                                                    strtotime($tanggal_akhir ?? date('Y-m-d'))
                                                                                                                 ) ?>.</p>
 </div>
 <?= $this->endSection() ?>

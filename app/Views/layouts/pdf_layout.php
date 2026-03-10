@@ -83,7 +83,9 @@
             width: 100%;
             border-collapse: collapse;
             text-align: center;
-            margin-top: 20px;
+            margin-top: 10px;
+            page-break-inside: avoid;
+            page-break-before: avoid;
         }
         .signature-table td {
             width: 33.33%;

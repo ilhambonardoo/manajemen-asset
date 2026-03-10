@@ -17,10 +17,7 @@
             <ul class="nav nav-pills nav-sidebar flex-column gap-1" data-widget="treeview" role="menu">
                 
                 <li class="nav-item">
-                    <a href="<?= base_url('dashboard') ?>" class="nav-link <?= $segment1 == 'dashboard' ||
-$segment1 == ''
-	? 'active'
-	: '' ?>" style="border-radius: 8px; transition: all 0.3s ease;">
+                    <a href="<?= base_url('dashboard') ?>" class="nav-link <?= ($segment1 == 'dashboard' || $segment1 == '') ? 'active' : '' ?>" style="border-radius: 8px; transition: all 0.3s ease;">
                         <i class="nav-icon fas fa-home"></i>
                         <p>Dashboard</p>
                     </a>
@@ -32,10 +29,7 @@ $segment1 == ''
                     </li>
 
                     <li class="nav-item">
-                        <a href="<?= base_url('asset/daftar') ?>" class="nav-link <?= $segment1 == 'asset' &&
-$segment2 == 'daftar'
-	? 'active'
-	: '' ?>" style="border-radius: 8px; transition: all 0.3s ease;">
+                        <a href="<?= base_url('asset/daftar') ?>" class="nav-link <?= ($segment1 == 'asset' && $segment2 == 'daftar') ? 'active' : '' ?>" style="border-radius: 8px; transition: all 0.3s ease;">
                             <i class="nav-icon fas fa-list"></i>
                             <p>Daftar Aset Tetap</p>
                         </a>
@@ -44,9 +38,7 @@ $segment2 == 'daftar'
 
                 <?php if (in_array($role, ['Admin', 'Supervisor', 'Staff Finance'])): ?>
                     <li class="nav-item">
-                        <a href="<?= base_url('lokasi') ?>" class="nav-link <?= $segment1 == 'lokasi'
-	? 'active'
-	: '' ?>" style="border-radius: 8px; transition: all 0.3s ease;">
+                        <a href="<?= base_url('lokasi') ?>" class="nav-link <?= ($segment1 == 'lokasi') ? 'active' : '' ?>" style="border-radius: 8px; transition: all 0.3s ease;">
                             <i class="nav-icon fas fa-map-marked-alt"></i>
                             <p>Lokasi Aset</p>
                         </a>
@@ -55,10 +47,7 @@ $segment2 == 'daftar'
 
                 <?php if (in_array($role, ['Admin', 'Supervisor'])): ?>
                     <li class="nav-item">
-                        <a href="<?= base_url('asset/penyusutan') ?>" class="nav-link <?= $segment1 == 'asset' &&
-$segment2 == 'penyusutan'
-	? 'active'
-	: '' ?>" style="border-radius: 8px; transition: all 0.3s ease;">
+                        <a href="<?= base_url('asset/penyusutan') ?>" class="nav-link <?= ($segment1 == 'asset' && $segment2 == 'penyusutan') ? 'active' : '' ?>" style="border-radius: 8px; transition: all 0.3s ease;">
                             <i class="nav-icon fas fa-chart-line"></i>
                             <p>Penyusutan Aset</p>
                         </a>
@@ -66,34 +55,23 @@ $segment2 == 'penyusutan'
                 <?php endif; ?>
 
                 <?php if (in_array($role, ['Admin', 'Manager'])): ?>
-                    <li class="nav-item <?= $segment1 == 'approval' ? 'menu-open' : '' ?>">
-                        <a href="javascript:void(0)" class="nav-link <?= $segment1 == 'approval'
-                        	? 'active'
-                        	: '' ?>" style="border-radius: 8px; transition: all 0.3s ease;" onclick="toggleDropdown('approvalMenu', 'arrowApproval')">
+                    <li class="nav-item <?= ($segment1 == 'approval') ? 'menu-open' : '' ?>">
+                        <a href="javascript:void(0)" class="nav-link <?= ($segment1 == 'approval') ? 'active' : '' ?>" style="border-radius: 8px; transition: all 0.3s ease;" onclick="toggleDropdown('approvalMenu', 'arrowApproval')">
                             <i class="nav-icon fas fa-check-circle"></i>
                             <p>
                                 Pusat Approval
-                                <i class="right fas fa-angle-left transition-arrow" id="arrowApproval"></i>
+                                <i class="right fas fa-angle-left transition-arrow ms-2" id="arrowApproval"></i>
                             </p>
                         </a>
                         <ul id="approvalMenu" class="nav nav-treeview dropdown-container">
                             <li class="nav-item">
-                                <a href="<?= base_url('approval?jenis=penjualan') ?>" class="nav-link <?= $segment1 ==
-	'approval' && ($_GET['jenis'] ?? '') == 'penjualan'
-	? 'active'
-	: '' ?>">
+                                <a href="<?= base_url('approval?jenis=penjualan') ?>" class="nav-link <?= ($segment1 == 'approval' && ($_GET['jenis'] ?? '') == 'penjualan') ? 'active' : '' ?>">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Penjualan Aset</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="<?= base_url('approval?jenis=penghentian') ?>" class="nav-link <?= ($_GET[
-	'jenis'
-] ??
-	'') ==
-'penghentian'
-	? 'active'
-	: '' ?>">
+                                <a href="<?= base_url('approval?jenis=penghentian') ?>" class="nav-link <?= (($_GET['jenis'] ?? '') == 'penghentian') ? 'active' : '' ?>">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Penghentian Aset</p>
                                 </a>
@@ -106,55 +84,43 @@ $segment2 == 'penyusutan'
                     Laporan
                 </li>
 
-                <li class="nav-item <?= $segment1 == 'laporan' ? 'menu-open' : '' ?>">
-                    <a href="javascript:void(0)" class="nav-link <?= $segment1 == 'laporan'
-                    	? 'active'
-                    	: '' ?>" style="border-radius: 8px; transition: all 0.3s ease;" onclick="toggleDropdown('laporanMenu', 'arrowLaporan')">
+                <li class="nav-item <?= ($segment1 == 'laporan') ? 'menu-open' : '' ?>">
+                    <a href="javascript:void(0)" class="nav-link <?= ($segment1 == 'laporan') ? 'active' : '' ?>" style="border-radius: 8px; transition: all 0.3s ease;" onclick="toggleDropdown('laporanMenu', 'arrowLaporan')">
                         <i class="nav-icon fas fa-file-alt"></i>
                         <p>
                             Jenis Laporan
-                            <i class="right fas fa-angle-left transition-arrow" id="arrowLaporan"></i>
+                            <i class="right fas fa-angle-left transition-arrow ms-3" id="arrowLaporan"></i>
                         </p>
                     </a>
                     <ul id="laporanMenu" class="nav nav-treeview dropdown-container">
                         <li class="nav-item">
-                            <a href="<?= base_url('laporan?jenis=keseluruhan') ?>" class="nav-link <?= $segment1 ==
-	'laporan' &&
-(($_GET['jenis'] ?? '') == 'keseluruhan' || !isset($_GET['jenis']))
-	? 'active'
-	: '' ?>">
+                            <a href="<?= base_url('laporan?jenis=keseluruhan') ?>" class="nav-link <?= ($segment1 == 'laporan' && (($_GET['jenis'] ?? '') == 'keseluruhan' || !isset($_GET['jenis']))) ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Laporan Keseluruhan</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('laporan?jenis=jurnal') ?>" class="nav-link <?= ($_GET['jenis'] ??
-	'') ==
-'jurnal'
-	? 'active'
-	: '' ?>">
+                            <a href="<?= base_url('laporan?jenis=jurnal') ?>" class="nav-link <?= ($_GET['jenis'] ?? '') == 'jurnal'? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Jurnal Penyusutan</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('laporan?jenis=kartu_aset') ?>" class="nav-link <?= ($_GET['jenis'] ??
-	'') ==
-'kartu_aset'
-	? 'active'
-	: '' ?>">
+                            <a href="<?= base_url('laporan?jenis=kartu_aset') ?>" class="nav-link <?= (($_GET['jenis'] ?? '') == 'kartu_aset') ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Kartu Aset</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?= base_url('laporan?jenis=lokasi') ?>" class="nav-link <?= ($_GET['jenis'] ??
-	'') ==
-'lokasi'
-	? 'active'
-	: '' ?>">
+                            <a href="<?= base_url('laporan?jenis=lokasi') ?>" class="nav-link <?= (($_GET['jenis'] ?? '') == 'lokasi') ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Laporan Lokasi</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url('laporan?jenis=laporan_aset') ?>" class="nav-link <?= (($_GET['jenis'] ?? '') == 'laporan_aset') ? 'active' : '' ?>">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Laporan Aset (Gabungan)</p>
                             </a>
                         </li>
                     </ul>
@@ -165,10 +131,7 @@ $segment2 == 'penyusutan'
                         Sistem
                     </li>
                     <li class="nav-item">
-                        <a href="<?= base_url('admin/users') ?>" class="nav-link <?= $segment1 == 'admin' &&
-$segment2 == 'users'
-	? 'active'
-	: '' ?>" style="border-radius: 8px; transition: all 0.3s ease;">
+                        <a href="<?= base_url('admin/users') ?>" class="nav-link <?= ($segment1 == 'admin' && $segment2 == 'users') ? 'active' : '' ?>" style="border-radius: 8px; transition: all 0.3s ease;">
                             <i class="nav-icon fas fa-user-cog"></i>
                             <p>Kelola Pengguna</p>
                         </a>
@@ -180,9 +143,7 @@ $segment2 == 'users'
     </div>
 
     <div class="sidebar-footer border-top border-secondary mt-auto" style="padding: 15px;">
-        <a href="<?= base_url(
-        	'logout'
-        ) ?>" class="btn btn-danger btn-sm w-100 d-flex align-items-center justify-content-center gap-2" style="border-radius: 8px; font-weight: 500; padding: 8px;">
+        <a href="<?= base_url('logout') ?>" class="btn btn-danger btn-sm w-100 d-flex align-items-center justify-content-center gap-2" style="border-radius: 8px; font-weight: 500; padding: 8px;">
             <i class="fas fa-sign-out-alt"></i>
             <span>Keluar Aplikasi</span>
         </a>

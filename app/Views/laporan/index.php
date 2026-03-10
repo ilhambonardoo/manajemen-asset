@@ -25,23 +25,12 @@
                                 <label class="form-label fw-bold">Jenis Laporan <span class="text-danger">*</span></label>
                                 <select class="form-select border-primary" id="jenis_laporan" name="jenis_laporan" required>
                                     <option value="">-- Pilih Laporan --</option>
-                                    <option value="keseluruhan" <?= isset($current_jenis) &&
-                                                                    $current_jenis == 'keseluruhan'
-                                                                    ? 'selected'
-                                                                    : '' ?>>Laporan Aset Tetap Keseluruhan</option>
-                                    <option value="kartu_aset" <?= isset($current_jenis) &&
-                                                                    $current_jenis == 'kartu_aset'
-                                                                    ? 'selected'
-                                                                    : '' ?>>Kartu Aset Tetap (Per Aset)</option>
-                                    <option value="jurnal" <?= isset($current_jenis) && $current_jenis == 'jurnal'
-                                                                ? 'selected'
-                                                                : '' ?>>Jurnal Penyesuaian Penyusutan</option>
-                                    <option value="lokasi" <?= isset($current_jenis) && $current_jenis == 'lokasi'
-                                                                ? 'selected'
-                                                                : '' ?>>Laporan Aset Per Lokasi</option>
-                                    <option value="nonaktif" <?= isset($current_jenis) && $current_jenis == 'nonaktif'
-                                                                    ? 'selected'
-                                                                    : '' ?>>Laporan Aset Nonaktif (Disposed)</option>
+                                    <option value="keseluruhan" <?= (isset($current_jenis) && $current_jenis == 'keseluruhan') ? 'selected' : '' ?>>Laporan Aset Tetap Keseluruhan</option>
+                                    <option value="kartu_aset" <?= (isset($current_jenis) && $current_jenis == 'kartu_aset') ? 'selected' : '' ?>>Kartu Aset Tetap (Per Aset)</option>
+                                    <option value="jurnal" <?= (isset($current_jenis) && $current_jenis == 'jurnal') ? 'selected' : '' ?>>Jurnal Penyesuaian Penyusutan</option>
+                                    <option value="lokasi" <?= (isset($current_jenis) && $current_jenis == 'lokasi') ? 'selected' : '' ?>>Laporan Aset Per Lokasi</option>
+                                    <option value="nonaktif" <?= (isset($current_jenis) && $current_jenis == 'nonaktif') ? 'selected' : '' ?>>Laporan Aset Nonaktif (Disposed)</option>
+                                    <option value="laporan_aset" <?= (isset($current_jenis) && $current_jenis == 'laporan_aset') ? 'selected' : '' ?>>Laporan Aset (Perolehan, Penyusutan, dll)</option>
                                 </select>
                             </div>
 
@@ -65,9 +54,7 @@
                                             12 => 'Desember',
                                         ];
                                         foreach ($bulan_array as $key => $val): ?>
-                                            <option value="<?= $key ?>" <?= date('n') == $key
-                                                                            ? 'selected'
-                                                                            : '' ?>><?= $val ?></option>
+                                            <option value="<?= $key ?>" <?= (date('n') == $key) ? 'selected' : '' ?>><?= $val ?></option>
                                         <?php endforeach;
                                         ?>
                                     </select>
@@ -81,9 +68,7 @@
                                     <option value="">-- Pilih Kode Aset --</option>
                                     <?php if (!empty($assets) && is_array($assets)): ?>
                                         <?php foreach ($assets as $asset): ?>
-                                            <option value="<?= esc($asset['id']) ?>">
-                                                <?= esc($asset['kode_aset']) ?> - <?= esc($asset['nama_aset']) ?>
-                                            </option>
+                                            <option value="<?= esc($asset['id']) ?>"><?= esc($asset['kode_aset']) ?> - <?= esc($asset['nama_aset']) ?></option>
                                         <?php endforeach; ?>
                                     <?php endif; ?>
                                 </select>
@@ -96,9 +81,7 @@
                                     <?php if (!empty($lokasi) && is_array($lokasi)): ?>
                                         <?php foreach ($lokasi as $loc): ?>
                                             <?php if (!empty($loc['lokasi_aset'])): ?>
-                                                <option value="<?= esc($loc['lokasi_aset']) ?>">
-                                                    <?= esc($loc['lokasi_aset']) ?>
-                                                </option>
+                                                <option value="<?= esc($loc['lokasi_aset']) ?>"><?= esc($loc['lokasi_aset']) ?></option>
                                             <?php endif; ?>
                                         <?php endforeach; ?>
                                     <?php endif; ?>
@@ -139,7 +122,7 @@
 
             $('.filter-group').hide();
 
-            if (jenis === 'keseluruhan' || jenis === 'jurnal') {
+            if (jenis === 'keseluruhan' || jenis === 'jurnal' || jenis === 'laporan_aset') {
                 $('#filter_periode').fadeIn();
             } else if (jenis === 'kartu_aset') {
                 $('#filter_aset').fadeIn();

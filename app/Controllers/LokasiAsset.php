@@ -4,33 +4,60 @@ namespace App\Controllers;
 
 use App\Models\AssetModel;
 use App\Models\RiwayatLokasiModel;
+use App\Models\LokasiModel;
 
 class LokasiAsset extends BaseController {
 	protected $assetModel;
 	protected $riwayatModel;
+	protected $lokasiModel;
 
 	public function __construct() {
 		$this->assetModel = new AssetModel();
 		$this->riwayatModel = new RiwayatLokasiModel();
+		$this->lokasiModel = new LokasiModel();
 	}
+	
 	public function index() {
-		$data['lokasi'] = [
-			['kode' => 'L001', 'nama' => 'Director Room'],
-			['kode' => 'L002', 'nama' => 'Finance Room'],
-			['kode' => 'L003', 'nama' => 'Office 1'],
-			['kode' => 'L004', 'nama' => 'Office 2'],
-			['kode' => 'L005', 'nama' => 'Ruang Meeting Jakarta'],
-			['kode' => 'L006', 'nama' => 'Ruang Meeting Surabaya'],
-			['kode' => 'L007', 'nama' => 'Ruang Meeting Yogyakarta'],
-			['kode' => 'L008', 'nama' => 'Ruang Meeting Bali'],
-			['kode' => 'L009', 'nama' => 'Live Streaming Room'],
-			['kode' => 'L010', 'nama' => 'Pantry'],
-			['kode' => 'L011', 'nama' => 'Lobby'],
-			['kode' => 'L012', 'nama' => 'Gudang'],
-			['kode' => 'L013', 'nama' => 'Lainnya'],
-		];
-
+		$data['lokasi'] = $this->lokasiModel->findAll();
 		return view('lokasi/index', $data);
+	}
+	
+	public function tambahLokasi() {
+		$nama = $this->request->getPost('nama_lokasi');
+		
+		if (empty($nama)) {
+			return $this->response->setJSON([
+				'success' => false,
+				'message' => 'Nama lokasi tidak boleh kosong'
+			])->setStatusCode(400);
+		}
+
+		$existingLokasi = $this->lokasiModel->where('nama', $nama)->first();
+		if ($existingLokasi) {
+			return $this->response->setJSON([
+				'success' => false,
+				'message' => 'Lokasi sudah terdaftar'
+			])->setStatusCode(400);
+		}
+
+		$kode = $this->lokasiModel->generateKode();
+
+		if ($this->lokasiModel->save([
+			'kode' => $kode,
+			'nama' => $nama,
+		])) {
+			return $this->response->setJSON([
+				'success' => true,
+				'message' => 'Lokasi berhasil ditambahkan',
+				'kode' => $kode,
+				'nama' => $nama,
+			]);
+		}
+
+		return $this->response->setJSON([
+			'success' => false,
+			'message' => 'Gagal menambahkan lokasi'
+		])->setStatusCode(500);
 	}
 
 	public function penempatan($kode_lokasi, $nama_lokasi) {

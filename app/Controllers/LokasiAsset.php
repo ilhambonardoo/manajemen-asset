@@ -111,4 +111,22 @@ class LokasiAsset extends BaseController {
 
 		return view('lokasi/detail', $data);
 	}
+
+	public function delete($id) {
+		$lokasi = $this->lokasiModel->find($id);
+		if (!$lokasi) {
+			return redirect()->to('/lokasi')->with('error', 'Lokasi tidak ditemukan.');
+		}
+
+		$asetCount = $this->assetModel->where('lokasi_aset', $lokasi['nama'])->countAllResults();
+		if ($asetCount > 0) {
+			return redirect()->back()->with('error', 'Tidak dapat menghapus lokasi yang masih memiliki aset. Pindahkan semua aset terlebih dahulu.');
+		}
+
+		if ($this->lokasiModel->delete($id)) {
+			return redirect()->to('/lokasi')->with('success', 'Lokasi berhasil dihapus.');
+		}
+
+		return redirect()->back()->with('error', 'Gagal menghapus lokasi.');
+	}
 }

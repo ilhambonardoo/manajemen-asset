@@ -70,5 +70,6 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 		$routes->get('penempatan/(:any)/(:any)', 'LokasiAsset::penempatan/$1/$2');
 		$routes->post('simpan_penempatan', 'LokasiAsset::simpan_penempatan');
 		$routes->get('detail/(:any)', 'LokasiAsset::detail/$1');
+		$routes->post('delete/(:num)', 'LokasiAsset::delete/$1');
 	});
 });

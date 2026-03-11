@@ -7,6 +7,10 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 
+$routes->group('api', function ($routes) {
+	$routes->get('lokasi', 'Api::lokasi');
+});
+
 $routes->get('login', 'Auth::index');
 $routes->post('login/process', 'Auth::loginProcess');
 
@@ -62,8 +66,10 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 
 	$routes->group('lokasi', ['filter' => 'role:Admin,Supervisor,Staff Finance'], function ($routes) {
 		$routes->get('', 'LokasiAsset::index');
+		$routes->post('tambah', 'LokasiAsset::tambahLokasi');
 		$routes->get('penempatan/(:any)/(:any)', 'LokasiAsset::penempatan/$1/$2');
 		$routes->post('simpan_penempatan', 'LokasiAsset::simpan_penempatan');
 		$routes->get('detail/(:any)', 'LokasiAsset::detail/$1');
+		$routes->post('delete/(:num)', 'LokasiAsset::delete/$1');
 	});
 });

@@ -119,53 +119,16 @@
                         <div class="row mb-3">
                              <div class="col-md-6">
                                 <label for="lokasi_aset" class="form-label fw-bold">Lokasi Aset</label>
-                                <select class="form-select" name="lokasi_aset" required>
-                                    <option value="" selected disabled>-- Pilih Lokasi --</option>
-                                    <option value="Director Room" <?= old('lokasi_aset') == 'Director Room'
-                                    	? 'selected'
-                                    	: '' ?>>Director Room</option>
-                                    <option value="Finance Room" <?= old('lokasi_aset') == 'Finance Room'
-                                    	? 'selected'
-                                    	: '' ?>>Finance Room</option>
-                                    <option value="Office 1" <?= old('lokasi_aset') == 'Office 1'
-                                    	? 'selected'
-                                    	: '' ?>>Office 1</option>
-                                    <option value="Office 2" <?= old('lokasi_aset') == 'Office 2'
-                                    	? 'selected'
-                                    	: '' ?>>Office 2</option>
-                                    <option value="Ruang Meeting Jakarta" <?= old('lokasi_aset') ==
-                                    'Ruang Meeting Jakarta'
-                                    	? 'selected'
-                                    	: '' ?>>Ruang Meeting Jakarta</option>
-                                    <option value="Ruang Meeting Surabaya" <?= old('lokasi_aset') ==
-                                    'Ruang Meeting Surabaya'
-                                    	? 'selected'
-                                    	: '' ?>>Ruang Meeting Surabaya</option>
-                                    <option value="Ruang Meeting Yogyakarta" <?= old('lokasi_aset') ==
-                                    'Ruang Meeting Yogyakarta'
-                                    	? 'selected'
-                                    	: '' ?>>Ruang Meeting Yogyakarta</option>
-                                    <option value="Ruang Meeting Bali" <?= old('lokasi_aset') == 'Ruang Meeting Bali'
-                                    	? 'selected'
-                                    	: '' ?>>Ruang Meeting Bali</option>
-                                    <option value="Live Streaming Room" <?= old('lokasi_aset') == 'Live Streaming Room'
-                                    	? 'selected'
-                                    	: '' ?>>Live Streaming Room</option>
-                                    <option value="Pantry" <?= old('lokasi_aset') == 'Pantry'
-                                    	? 'selected'
-                                    	: '' ?>>Pantry</option>
-                                    <option value="Lobby" <?= old('lokasi_aset') == 'Lobby'
-                                    	? 'selected'
-                                    	: '' ?>>Lobby</option>
-                                    <option value="Gudang" <?= old('lokasi_aset') == 'Gudang'
-                                    	? 'selected'
-                                    	: '' ?>>Gudang</option>
-                                    <option value="Lainnya" <?= old('lokasi_aset') == 'Lainnya'
-                                    	? 'selected'
-                                    	: '' ?>>Lainnya</option>
-                                </select>
+                                <div class="input-group">
+                                    <select class="form-select" id="lokasi_aset" required></select>
+                                    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalTambahLokasi" title="Tambah Lokasi Baru">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
+
+                        <input type="hidden" id="lokasi_aset_final" name="lokasi_aset">
 
                         <div class="d-flex justify-content-end mt-4">
                             <a href="<?= base_url('asset/daftar') ?>" class="btn btn-secondary me-2">Batal</a>
@@ -177,26 +140,150 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modalTambahLokasi" tabindex="-1" aria-labelledby="modalTambahLokasiLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title" id="modalTambahLokasiLabel">Tambah Lokasi Baru</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="namaLokasiModal" class="form-label fw-bold">Nama Lokasi</label>
+                    <input type="text" class="form-control" id="namaLokasiModal" placeholder="Contoh: Gudang Cabang Bandung" maxlength="100">
+                    <div class="text-danger small mt-2" id="errorMsgModal" style="display: none;"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-info text-white" id="btnTambahLokasi">Tambah Lokasi</button>
+            </div>
+        </div>
+    </div>
+</div>
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        const lokasiSelect = document.getElementById('lokasi_aset');
+        const lokasiCustomContainer = document.getElementById('lokasi_custom_container');
+        const lokasiCustomInput = document.getElementById('lokasi_custom');
+
+        fetch('<?= base_url('lokasi') ?>')
+            .then(response => response.text())
+            .then(html => {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                loadLokasiOptions();
+            })
+            .catch(error => console.error('Error loading lokasi:', error));
+
+        function loadLokasiOptions() {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', '<?= base_url('api/lokasi') ?>', true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    try {
+                        const lokasiList = JSON.parse(xhr.responseText);
+                        lokasiSelect.innerHTML = '<option value="" selected disabled>-- Pilih Lokasi --</option>';
+                        lokasiList.forEach(lokasi => {
+                            const option = document.createElement('option');
+                            option.value = lokasi.nama;
+                            option.textContent = lokasi.nama;
+                            if (lokasi.nama === '<?= old('lokasi_aset') ?>') {
+                                option.selected = true;
+                            }
+                            lokasiSelect.appendChild(option);
+                        });
+                    } catch (e) {
+                        console.error('Error parsing lokasi:', e);
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+        const btnTambahLokasi = document.getElementById('btnTambahLokasi');
+        const namaLokasiModal = document.getElementById('namaLokasiModal');
+        const errorMsgModal = document.getElementById('errorMsgModal');
+        const modalTambahLokasi = document.getElementById('modalTambahLokasi');
+        const modalInstance = new bootstrap.Modal(modalTambahLokasi);
+
+        if (btnTambahLokasi) {
+            btnTambahLokasi.addEventListener('click', function() {
+                const namaLokasi = namaLokasiModal.value.trim();
+
+                if (!namaLokasi) {
+                    errorMsgModal.textContent = 'Nama lokasi tidak boleh kosong';
+                    errorMsgModal.style.display = 'block';
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('nama_lokasi', namaLokasi);
+
+                fetch('<?= base_url('lokasi/tambah') ?>', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        loadLokasiOptions();
+                        
+                        setTimeout(() => {
+                            lokasiSelect.value = data.nama;
+                        }, 100);
+
+                        namaLokasiModal.value = '';
+                        errorMsgModal.style.display = 'none';
+                        
+                        const alertDiv = document.createElement('div');
+                        alertDiv.className = 'alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3';
+                        alertDiv.style.zIndex = '9999';
+                        alertDiv.innerHTML = `
+                            <i class="fas fa-check-circle me-2"></i>${data.message}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        `;
+                        document.body.appendChild(alertDiv);
+                        
+                        modalInstance.hide();
+
+                        setTimeout(() => alertDiv.remove(), 3000);
+                    } else {
+                        errorMsgModal.textContent = data.message || 'Terjadi kesalahan';
+                        errorMsgModal.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    errorMsgModal.textContent = 'Gagal menambahkan lokasi';
+                    errorMsgModal.style.display = 'block';
+                });
+            });
+
+            modalTambahLokasi.addEventListener('show.bs.modal', function() {
+                namaLokasiModal.value = '';
+                errorMsgModal.style.display = 'none';
+            });
+        }
+
         const kategoriSelect = document.getElementById('kelompok_aset');
         const umurInput = document.getElementById('umur_penyusutan');
         
-        // Elemen Harga Satuan
         const hargaSatuanDisplay = document.getElementById('harga_satuan_display');
         const hargaSatuanHidden = document.getElementById('harga_satuan');
         
-        // Elemen Jumlah
         const jumlahAsetInput = document.getElementById('jumlah_aset');
         
-        // Elemen Harga Perolehan (Total)
         const totalPerolehanDisplay = document.getElementById('harga_perolehan_display');
         const totalPerolehanHidden = document.getElementById('harga_perolehan');
 
-        // Fungsi Format Rupiah
         function formatRupiah(angka) {
             let number_string = angka.replace(/[^,\d]/g, '').toString(),
                 split = number_string.split(','),
@@ -211,46 +298,35 @@
             return split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
         }
 
-        // Fungsi Hitung Total
         function hitungTotal() {
-            // Ambil value asli (angka murni) dari hidden input atau parse dari display
             let harga = parseFloat(document.getElementById('harga_satuan').value) || 0;
             let jumlah = parseFloat(document.getElementById('jumlah_aset').value) || 0;
             
             let total = harga * jumlah;
 
-            // Set ke hidden input (untuk dikirim ke database)
             const hiddenHarga = document.getElementById('harga_perolehan');
             if(hiddenHarga) hiddenHarga.value = total;
             
-            // Set ke display (diformat)
             const displayHarga = document.getElementById('harga_perolehan_display');
             if(displayHarga) displayHarga.value = formatRupiah(total.toString());
         }
 
-        // Event Listener untuk Harga Satuan (Input User)
         if(hargaSatuanDisplay) {
             hargaSatuanDisplay.addEventListener('input', function(e) {
-                // Hapus karakter selain angka
                 let rawValue = this.value.replace(/\D/g, ''); 
                 
-                // Format tampilan dengan titik ribuan
                 this.value = formatRupiah(rawValue);
 
-                // Simpan nilai murni (integer) ke hidden input
                 if(hargaSatuanHidden) hargaSatuanHidden.value = rawValue;
 
-                // Hitung total
                 hitungTotal();
             });
         }
 
-        // Event Listener untuk Jumlah
         if(jumlahAsetInput) {
              jumlahAsetInput.addEventListener('input', hitungTotal);
         }
 
-        // Logic Kode Aset Otomatis
         const prefixDisplay = document.getElementById('prefix_kode');
         const nomorAsetInput = document.getElementById('nomor_aset');
         const kodeAsetHidden = document.getElementById('kode_aset');
@@ -293,10 +369,15 @@
 
         kategoriSelect.addEventListener('change', updateKategoriState);
         
-        // Trigger saat load jika ada old value
         if(kategoriSelect.value) {
             updateKategoriState();
         }
-    });
+
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            const lokasiFinalInput = document.getElementById('lokasi_aset_final');
+            lokasiFinalInput.value = lokasiSelect.value;
+        });
+    })
 </script>
 <?= $this->endSection() ?>

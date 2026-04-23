@@ -18,7 +18,14 @@ class LokasiAsset extends BaseController {
 	}
 	
 	public function index() {
-		$data['lokasi'] = $this->lokasiModel->findAll();
+		$filter_nama = $this->request->getGet('filter_nama');
+		
+		if (!empty($filter_nama)) {
+			$data['lokasi'] = $this->lokasiModel->where('nama', $filter_nama)->findAll();
+		} else {
+			$data['lokasi'] = $this->lokasiModel->findAll();
+		}
+		
 		return view('lokasi/index', $data);
 	}
 	

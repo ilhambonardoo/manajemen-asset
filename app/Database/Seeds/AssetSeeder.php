@@ -40,7 +40,10 @@ class AssetSeeder extends Seeder {
 		$categories = ['office equipment', 'furniture/fixture (non metal)', 'furniture/fixture (metal)', 'booth'];
 
 		// Sesuai ENUM di Migration
-		$sources = ['Accurate', 'Kingdee'];
+		$sources = ['Accurate', 'Kingdee', 'Manual Input'];
+
+		// Sesuai field metode_penyusutan
+		$methods = ['Garis Lurus', 'Saldo Menurun'];
 
 		for ($i = 1; $i <= 50; $i++) {
 			// Random index untuk pengambilan data acak
@@ -48,6 +51,7 @@ class AssetSeeder extends Seeder {
 			$catRand = $categories[array_rand($categories)];
 			$locRand = $locations[array_rand($locations)];
 			$srcRand = $sources[array_rand($sources)];
+			$methodRand = $methods[array_rand($methods)];
 
 			// Random Tanggal antara 2020 - 2024
 			$year = rand(2020, 2024);
@@ -55,19 +59,23 @@ class AssetSeeder extends Seeder {
 			$day = rand(1, 28);
 			$date = "$year-$month-$day";
 
-			// Random Harga (Jutaan - Puluhan Juta)
-			$price = rand(2, 25) * 1000000;
+			// Random Jumlah & Harga Satuan
+			$qty = rand(1, 5);
+			$unitPrice = rand(1, 15) * 1000000;
+			$totalPrice = $qty * $unitPrice;
 
-			// Tentukan umur penyusutan (misal: elektronik 4 thn, furniture 8 thn)
-			$usefulLife = $catRand == 'office equipment' ? 4 : 8;
+			// Tentukan umur penyusutan (elektronik 48 bln, furniture 96 bln)
+			$usefulLife = $catRand == 'office equipment' ? 48 : 96;
 
 			$data[] = [
 				'kode_aset' => 'AST-' . str_pad($i, 4, '0', STR_PAD_LEFT), // Hasil: AST-0001
 				'nama_aset' => $itemRand,
 				'kelompok_aset' => $catRand,
-				'jumlah_aset' => 1,
-				'harga_perolehan' => $price,
+				'jumlah_aset' => $qty,
+				'harga_satuan' => $unitPrice,
+				'harga_perolehan' => $totalPrice,
 				'umur_penyusutan' => $usefulLife,
+				'metode_penyusutan' => $methodRand,
 				'tanggal_perolehan' => $date,
 				'lokasi_aset' => $locRand,
 				'sumber_data' => $srcRand, // Penting untuk Gap Analysis

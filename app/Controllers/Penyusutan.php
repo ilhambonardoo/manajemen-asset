@@ -16,16 +16,21 @@ class Penyusutan extends BaseController
 
 	public function index()
 	{
+		$tipeLaporan = $this->request->getGet('tipe') ?? 'bulanan';
 		$bulanPilih = $this->request->getGet('bulan') ?? date('n');
 		$tahunPilih = $this->request->getGet('tahun') ?? date('Y');
 
-		$targetDatestr = $tahunPilih . '-' . sprintf('%02d', $bulanPilih) . '-01';
+		if ($tipeLaporan === 'tahunan') {
+			$targetDatestr = $tahunPilih . '-12-31';
+		} else {
+			$targetDatestr = $tahunPilih . '-' . sprintf('%02d', $bulanPilih) . '-01';
+		}
 		$targetDate = new DateTime($targetDatestr);
 
-		$lastDayOfMonthStr = date('Y-m-t', strtotime($targetDatestr));
+		$lastDayOfPeriodStr = $tipeLaporan === 'tahunan' ? $tahunPilih . '-12-31' : date('Y-m-t', strtotime($targetDatestr));
 
 		$builderTotal = $this->assetModel->where('status_aktif', 1);
-		$builderTotal->where('tanggal_perolehan <=', $lastDayOfMonthStr);
+		$builderTotal->where('tanggal_perolehan <=', $lastDayOfPeriodStr);
 
 		$totalAssets = $builderTotal->countAllResults(false);
 		$allAssets = $builderTotal->findAll();
@@ -75,8 +80,18 @@ class Penyusutan extends BaseController
 			$akumulasiKgd = min($bulanJalanKingdee, $umurBulan) * $bebanPerBulan;
 			$nilaiBukuKingdee = max(0, $hargaPerolehan - $akumulasiKgd);
 
-			$penyusutanAccurate = $bulanJalanAccurate > 0 && $bulanJalanAccurate <= $umurBulan ? $bebanPerBulan : 0;
-			$penyusutanKingdee = $bulanJalanKingdee > 0 && $bulanJalanKingdee <= $umurBulan ? $bebanPerBulan : 0;
+			if ($tipeLaporan === 'tahunan') {
+				// Penyusutan tahun ini = beban per bulan * sisa umur (tapi maks 12 bulan atau sisa umur yang ada)
+				// Sesuai request: "nilai penysutan bulanan dikalikan sisa umur"
+				// Tapi ini biasanya untuk sisa penyusutan. 
+				// Mari kita asumsikan untuk laporan tahunan adalah sisa penyusutan yang akan datang atau penyusutan di tahun tersebut.
+				// Re-read: "nilai penysutan bulanan dikalikan sisa umur"
+				$penyusutanAccurate = $bebanPerBulan * $sisaUmurAccurate;
+				$penyusutanKingdee = $bebanPerBulan * $sisaUmurKingdee;
+			} else {
+				$penyusutanAccurate = $bulanJalanAccurate > 0 && $bulanJalanAccurate <= $umurBulan ? $bebanPerBulan : 0;
+				$penyusutanKingdee = $bulanJalanKingdee > 0 && $bulanJalanKingdee <= $umurBulan ? $bebanPerBulan : 0;
+			}
 
 			$selisihBulanIni = abs($penyusutanAccurate - $penyusutanKingdee);
 
@@ -88,6 +103,7 @@ class Penyusutan extends BaseController
 				'sisa_umur_kgd' => $sisaUmurKingdee,
 				'nilai_buku_acc' => $nilaiBukuAccurate,
 				'nilai_buku_kgd' => $nilaiBukuKingdee,
+				'penyusutan_per_bulan' => $bebanPerBulan,
 				'accurate' => $penyusutanAccurate,
 				'kingdee' => $penyusutanKingdee,
 				'selisih' => $selisihBulanIni,
@@ -102,6 +118,7 @@ class Penyusutan extends BaseController
 
 		$data = [
 			'title' => 'Laporan Penyusutan Aset',
+			'tipe_pilih' => $tipeLaporan,
 			'bulan_pilih' => $bulanPilih,
 			'tahun_pilih' => $tahunPilih,
 			'data_penyusutan' => $dataPenyusutan,

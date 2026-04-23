@@ -16,7 +16,14 @@
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body bg-light rounded">
             <form action="" method="get" class="row g-3 align-items-end">
-                <div class="col-md-5">
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">Tipe Laporan</label>
+                    <select name="tipe" class="form-select" id="tipeLaporan">
+                        <option value="bulanan" <?= ($tipe_pilih ?? 'bulanan') == 'bulanan' ? 'selected' : '' ?>>Bulanan</option>
+                        <option value="tahunan" <?= ($tipe_pilih ?? 'bulanan') == 'tahunan' ? 'selected' : '' ?>>Tahunan</option>
+                    </select>
+                </div>
+                <div class="col-md-3" id="containerBulan">
                     <label class="form-label fw-bold">Periode Bulan</label>
                     <select name="bulan" class="form-select">
                         <?php
@@ -27,7 +34,7 @@
                         ?>
                     </select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="form-label fw-bold">Tahun</label>
                     <input type="number" name="tahun" class="form-control"
                         value="<?= isset($tahun_pilih) ? $tahun_pilih : date('Y') ?>"
@@ -47,7 +54,12 @@
     <div class="card shadow-sm border-0">
         <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
             <h6 class="m-0 fw-bold text-primary">
-                Data Aset Yang Disusutkan - Periode <?= $bulan_array[$bulan_pilih] ?? '' ?> <?= isset($tahun_pilih) ? $tahun_pilih : date('Y') ?>
+                Data Aset Yang Disusutkan - 
+                <?php if (($tipe_pilih ?? 'bulanan') == 'tahunan'): ?>
+                    Tahunan <?= isset($tahun_pilih) ? $tahun_pilih : date('Y') ?>
+                <?php else: ?>
+                    Periode <?= $bulan_array[$bulan_pilih] ?? '' ?> <?= isset($tahun_pilih) ? $tahun_pilih : date('Y') ?>
+                <?php endif; ?>
             </h6>
         </div>
         <div class="card-body">
@@ -60,7 +72,10 @@
                             <th rowspan="2" class="align-middle text-start">Nama Aset</th>
                             <th colspan="2" class="align-middle">Sisa Umur (Bln)</th>
                             <th colspan="2" class="align-middle">Nilai Buku</th>
-                            <th colspan="3">Penyusutan Bulan Ini</th>
+                            <?php if (($tipe_pilih ?? 'bulanan') == 'tahunan'): ?>
+                                <th rowspan="2" class="align-middle">Penyusutan / Bln</th>
+                            <?php endif; ?>
+                            <th colspan="3">Penyusutan <?= ($tipe_pilih ?? 'bulanan') == 'tahunan' ? 'Sampai Selesai' : 'Bulan Ini' ?></th>
                         </tr>
                         <tr>
                             <th class="bg-secondary text-white border-end border-white">Accurate</th>
@@ -103,6 +118,10 @@
                                         Rp <?= number_format($row['nilai_buku_kgd'], 0, ',', '.') ?>
                                     </td>
 
+                                    <?php if (($tipe_pilih ?? 'bulanan') == 'tahunan'): ?>
+                                        <td class="text-end fw-bold text-dark">Rp <?= number_format($row['penyusutan_per_bulan'], 0, ',', '.') ?></td>
+                                    <?php endif; ?>
+
                                     <td class="text-success fw-bold align-middle text-end">Rp <?= number_format($row['accurate'], 0, ',', '.') ?></td>
                                     <td class="text-info text-dark fw-bold align-middle text-end">Rp <?= number_format($row['kingdee'], 0, ',', '.') ?></td>
 
@@ -121,7 +140,7 @@
                     <?php if (!empty($data_penyusutan)): ?>
                     <tfoot>
                         <tr class="table-dark fw-bold text-end">
-                            <td colspan="7" class="text-uppercase align-middle text-center border-end border-light">Total Keseluruhan</td>
+                            <td colspan="<?= ($tipe_pilih ?? 'bulanan') == 'tahunan' ? '8' : '7' ?>" class="text-uppercase align-middle text-center border-end border-light">Total Keseluruhan</td>
                             <td class="align-middle text-center border-end border-light">Rp <?= number_format($total_accurate, 0, ',', '.') ?></td>
                             <td class="align-middle text-center border-end border-light">Rp <?= number_format($total_kingdee, 0, ',', '.') ?></td>
                             <td class="<?= $total_selisih > 0 ? 'text-danger' : 'text-success' ?> align-middle text-center border-end border-dark">
@@ -153,6 +172,22 @@
                 "zeroRecords": "Tidak ada data yang cocok dengan pencarian"
             }
         });
+
+        // Hide bulan container if "tahunan" is selected
+        function toggleBulan() {
+            if ($('#tipeLaporan').val() === 'tahunan') {
+                $('#containerBulan').hide();
+            } else {
+                $('#containerBulan').show();
+            }
+        }
+
+        $('#tipeLaporan').on('change', function() {
+            toggleBulan();
+        });
+
+        // Initial check
+        toggleBulan();
     });
 </script>
 <?= $this->endSection() ?>

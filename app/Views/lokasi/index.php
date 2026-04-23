@@ -2,9 +2,47 @@
 
 <?= $this->section('content') ?>
 <div class="container-fluid mt-4">
-    <h2 class="mb-4">Daftar Ruangan / Lokasi</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Daftar Ruangan / Lokasi</h2>
+        
+        <div class="d-flex gap-2">
+            <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-filter me-1"></i> Filter Lokasi
+                </button>
+                <div class="dropdown-menu dropdown-menu-end p-3" style="width: 300px;">
+                    <form action="<?= base_url('lokasi') ?>" method="get">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small text-uppercase">Jenis Lokasi / Ruangan</label>
+                            <select class="form-select" name="filter_nama">
+                                <option value="">-- Semua Lokasi --</option>
+                                <?php 
+                                // Ambil nama unik untuk filter
+                                $nama_lokasi_unik = [];
+                                foreach ($lokasi as $l) {
+                                    if (!in_array($l['nama'], $nama_lokasi_unik)) {
+                                        $nama_lokasi_unik[] = $l['nama'];
+                                    }
+                                }
+                                sort($nama_lokasi_unik);
+                                foreach ($nama_lokasi_unik as $nama): ?>
+                                    <option value="<?= esc($nama) ?>" <?= (request()->getGet('filter_nama') == $nama) ? 'selected' : '' ?>>
+                                        <?= esc($nama) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-sm">Terapkan Filter</button>
+                            <a href="<?= base_url('lokasi') ?>" class="btn btn-light btn-sm border">Reset</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <div class="card">
+    <div class="card shadow-sm border-0">
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">

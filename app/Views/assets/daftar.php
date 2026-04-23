@@ -58,7 +58,7 @@
                                     <?php if ($item['status_aktif'] == 1): ?>
                                         <span class="badge bg-success">Active</span>
                                     <?php else: ?>
-                                        <span class="badge bg-secondary">Disposed</span>
+                                        <span class="badge bg-danger">Non Active</span>
                                     <?php endif; ?>
                                 </td>
                                 <td class="text-center">

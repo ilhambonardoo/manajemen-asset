@@ -12,7 +12,19 @@
             <div class="flex-grow-1 d-flex align-items-center justify-content-center">
                 <div class="card border-0 shadow-lg p-4 w-100" style="max-width: 400px; border-radius: 15px;">
 
-                    <form action="<?= base_url('/login/process') ?>" method="post">
+                    <?php if (session()->getFlashdata('error')): ?>
+                        <div class="alert alert-danger">
+                            <?= session()->getFlashdata('error') ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (session()->getFlashdata('success')): ?>
+                        <div class="alert alert-success">
+                            <?= session()->getFlashdata('success') ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <form action="<?= base_url('login/process') ?>" method="post">
                         <?= csrf_field() ?>
                         
                         <div class="input-group mb-3 custom-input">

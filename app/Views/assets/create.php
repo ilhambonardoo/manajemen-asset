@@ -19,18 +19,15 @@
                                 <label for="kode_aset" class="form-label fw-bold">Kode Aset</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light fw-bold" id="prefix_kode">PRE</span>
-                                    <input type="text" class="form-control" id="nomor_aset" placeholder="001" maxlength="4" 
+                                    <input type="text" class="form-control" id="nomor_aset" name="nomor_aset_display" placeholder="001" maxlength="4" 
                                            value="<?= old('kode_aset')
                                            	? explode('-', old('kode_aset'))[1] ?? ''
-                                           	: '' ?>" required>
+                                           	: '' ?>" required readonly>
                                     <input type="hidden" id="kode_aset" name="kode_aset" value="<?= old(
                                     	'kode_aset'
                                     ) ?>">
                                 </div>
-                                <small class="text-muted">Prefix otomatis sesuai kategori. Masukkan nomor urut (contoh: 001)</small>
-                                <div class="text-danger small">
-                                    <?= $validation->getError('kode_aset') ?>
-                                </div>
+                                <small class="text-muted">Kode asset auto terisi, silahkan pilih kategori terlebih dahulu!</small>
                             </div>
                             <div class="col-md-6">
                                 <label for="nama_aset" class="form-label fw-bold">Nama Aset</label>
@@ -341,7 +338,17 @@
             }
         }
 
-        nomorAsetInput.addEventListener('input', updateKodeAset);
+        function fetchNextNumber(prefix) {
+            if (prefix === 'PRE') return;
+            
+            fetch(`<?= base_url('api/generate_kode') ?>/${prefix}`)
+                .then(response => response.json())
+                .then(data => {
+                    nomorAsetInput.value = data.next_number;
+                    updateKodeAset();
+                })
+                .catch(error => console.error('Error fetching next number:', error));
+        }
 
         function updateKategoriState() {
             const kategori = kategoriSelect.value;
@@ -364,7 +371,10 @@
 
             if(umur) umurInput.value = umur;
             prefixDisplay.innerText = prefix;
-            updateKodeAset();
+            
+            if (prefix !== 'PRE') {
+                fetchNextNumber(prefix);
+            }
         }
 
         kategoriSelect.addEventListener('change', updateKategoriState);

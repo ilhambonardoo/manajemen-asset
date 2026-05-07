@@ -9,6 +9,7 @@ $routes->get('/', 'Home::index');
 
 $routes->group('api', function ($routes) {
 	$routes->get('lokasi', 'Api::lokasi');
+	$routes->get('generate_kode/(:any)', 'Api::generate_kode/$1');
 });
 
 $routes->get('login', 'Auth::index');

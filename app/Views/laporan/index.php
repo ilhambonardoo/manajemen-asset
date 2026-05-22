@@ -25,7 +25,7 @@
                                 <label class="form-label fw-bold">Jenis Laporan <span class="text-danger">*</span></label>
                                 <select class="form-select border-primary" id="jenis_laporan" name="jenis_laporan" required>
                                     <option value="">-- Pilih Laporan --</option>
-                                    <option value="keseluruhan" <?= (isset($current_jenis) && $current_jenis == 'keseluruhan') ? 'selected' : '' ?>>Laporan Aset Tetap Keseluruhan</option>
+                                    <option value="keseluruhan" <?= (isset($current_jenis) && $current_jenis == 'keseluruhan') ? 'selected' : '' ?>>Laporan Daftar Aset Tetap</option>
                                     <option value="kartu_aset" <?= (isset($current_jenis) && $current_jenis == 'kartu_aset') ? 'selected' : '' ?>>Kartu Aset Tetap (Per Aset)</option>
                                     <option value="jurnal" <?= (isset($current_jenis) && $current_jenis == 'jurnal') ? 'selected' : '' ?>>Jurnal Penyesuaian Penyusutan</option>
                                     <option value="lokasi" <?= (isset($current_jenis) && $current_jenis == 'lokasi') ? 'selected' : '' ?>>Laporan Aset Per Lokasi</option>

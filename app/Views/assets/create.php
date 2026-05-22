@@ -9,30 +9,21 @@
                     <i class="fas fa-plus-circle me-1"></i> Perolehan Aset
                 </div>
 
-
                 <div class="card-body p-4">    
                     <form action="<?= base_url('asset/store') ?>" method="post">
                         <?= csrf_field() ?>
 
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="kode_aset" class="form-label fw-bold">Kode Aset</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light fw-bold" id="prefix_kode">PRE</span>
-                                    <input type="text" class="form-control" id="nomor_aset" name="nomor_aset_display" placeholder="001" maxlength="4" 
-                                           value="<?= old('kode_aset')
-                                           	? explode('-', old('kode_aset'))[1] ?? ''
-                                           	: '' ?>" required readonly>
-                                    <input type="hidden" id="kode_aset" name="kode_aset" value="<?= old(
-                                    	'kode_aset'
-                                    ) ?>">
-                                </div>
-                                <small class="text-muted">Kode asset auto terisi, silahkan pilih kategori terlebih dahulu!</small>
-                            </div>
-                            <div class="col-md-6">
                                 <label for="nama_aset" class="form-label fw-bold">Nama Aset</label>
                                 <input type="text" class="form-control" id="nama_aset" name="nama_aset" 
                                        placeholder="Cth: Laptop ASUS ROG" value="<?= old('nama_aset') ?>" required>
+                            </div>
+                             <div class="col-md-6">
+                                <label for="umur_penyusutan" class="form-label fw-bold">Umur Ekonomis (Bulan)</label>
+                                <input type="number" class="form-control" id="umur_penyusutan" name="umur_penyusutan" placeholder="Otomatis terisi..." value="<?= old(
+                                	'umur_penyusutan'
+                                ) ?>" readonly required>
                             </div>
                         </div>
 
@@ -57,13 +48,23 @@
                                     	: '' ?>>Booth</option>
                                 </select>
                             </div>
-                             <div class="col-md-6">
-                                <label for="umur_penyusutan" class="form-label fw-bold">Umur Ekonomis (Bulan)</label>
-                                <input type="number" class="form-control" id="umur_penyusutan" name="umur_penyusutan" placeholder="Otomatis terisi..." value="<?= old(
-                                	'umur_penyusutan'
-                                ) ?>" readonly required>
+                            <div class="col-md-6">
+                                <label for="kode_aset" class="form-label fw-bold">Kode Aset</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light fw-bold" id="prefix_kode">PRE</span>
+                                    <input type="text" class="form-control" id="nomor_aset" name="nomor_aset_display" placeholder="001" maxlength="4" 
+                                           value="<?= old('kode_aset')
+                                           	? explode('-', old('kode_aset'))[1] ?? ''
+                                           	: '' ?>" required readonly>
+                                    <input type="hidden" id="kode_aset" name="kode_aset" value="<?= old(
+                                    	'kode_aset'
+                                    ) ?>">
+                                </div>
+                                <small class="text-muted">Kode asset auto terisi, silahkan pilih kategori terlebih dahulu!</small>
                             </div>
                         </div>
+
+
 
                         <div class="row mb-3">
                             <div class="col-md-4">

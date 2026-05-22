@@ -15,24 +15,17 @@
 
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="kode_aset" class="form-label fw-bold">Kode Aset</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light fw-bold" id="prefix_kode">PRE</span>
-                                    <input type="text" class="form-control" id="nomor_aset" placeholder="001" maxlength="4" 
-                                           value="<?= isset($asset['kode_aset'])
-                                           	? explode('-', $asset['kode_aset'])[1] ?? $asset['kode_aset']
-                                           	: '' ?>">
-                                    <input type="hidden" id="kode_aset" name="kode_aset" value="<?= old(
-                                    	'kode_aset',
-                                    	$asset['kode_aset']
-                                    ) ?>">
-                                </div>
-                                <small class="text-muted">Prefix otomatis sesuai kategori.</small>
-                            </div>
-                            <div class="col-md-6">
                                 <label class="form-label fw-bold">Nama Aset</label>
                                 <input type="text" class="form-control" name="nama_aset" 
                                        value="<?= old('nama_aset', $asset['nama_aset']) ?>" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="umur_penyusutan" class="form-label fw-bold">Umur Ekonomis (Bulan)</label>
+                                <input type="number" class="form-control" id="umur_penyusutan" name="umur_penyusutan" 
+                                       value="<?= old(
+                                       	'umur_penyusutan',
+                                       	$asset['umur_penyusutan']
+                                       ) ?>" readonly required>
                             </div>
                         </div>
 
@@ -58,12 +51,19 @@
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label for="umur_penyusutan" class="form-label fw-bold">Umur Ekonomis (Bulan)</label>
-                                <input type="number" class="form-control" id="umur_penyusutan" name="umur_penyusutan" 
-                                       value="<?= old(
-                                       	'umur_penyusutan',
-                                       	$asset['umur_penyusutan']
-                                       ) ?>" readonly required>
+                                <label for="kode_aset" class="form-label fw-bold">Kode Aset</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light fw-bold" id="prefix_kode">PRE</span>
+                                    <input type="text" class="form-control" id="nomor_aset" placeholder="001" maxlength="4" 
+                                           value="<?= isset($asset['kode_aset'])
+                                           	? explode('-', $asset['kode_aset'])[1] ?? $asset['kode_aset']
+                                           	: '' ?>">
+                                    <input type="hidden" id="kode_aset" name="kode_aset" value="<?= old(
+                                    	'kode_aset',
+                                    	$asset['kode_aset']
+                                    ) ?>">
+                                </div>
+                                <small class="text-muted">Prefix otomatis sesuai kategori.</small>
                             </div>
                         </div>
 

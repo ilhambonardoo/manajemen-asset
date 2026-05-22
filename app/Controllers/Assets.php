@@ -145,6 +145,17 @@ class Assets extends BaseController
 		return redirect()->to('asset/daftar');
 	}
 
+	public function deleteBatch()
+	{
+		$ids = $this->request->getPost('ids');
+		if ($ids && is_array($ids)) {
+			$this->assetModel->delete($ids);
+			session()->setFlashdata('pesan', count($ids) . ' data aset berhasil dihapus!');
+		}
+
+		return redirect()->to('asset/daftar');
+	}
+
 	public function ajukan()
 	{
 		$jenis_pengajuan = $this->request->getPost('jenis_pengajuan');

@@ -96,7 +96,7 @@
                         <li class="nav-item">
                             <a href="<?= base_url('laporan?jenis=keseluruhan') ?>" class="nav-link <?= ($segment1 == 'laporan' && (($_GET['jenis'] ?? '') == 'keseluruhan' || !isset($_GET['jenis']))) ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Laporan Keseluruhan</p>
+                                <p>Laporan Daftar Aset Tetap</p>
                             </a>
                         </li>
                         <li class="nav-item">

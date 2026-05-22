@@ -42,6 +42,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 
 	$routes->group('asset', ['filter' => 'role:Admin'], function ($routes) {
 		$routes->get('delete/(:num)', 'Assets::delete/$1');
+		$routes->post('delete-batch', 'Assets::deleteBatch');
 	});
 
 	$routes->group('admin', ['filter' => 'role:Admin'], function ($routes) {

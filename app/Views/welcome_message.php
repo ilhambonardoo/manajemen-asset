@@ -12,9 +12,6 @@
 
             <div class="flex-grow-1 d-flex flex-column align-items-center justify-content-center text-center">
                 <div class="mb-4">
-                    <span class="badge rounded-pill px-3 py-2 text-dark mb-3" style="background-color: #e0f2f2; border: 1px solid #008080;">
-                        <i class="fas fa-circle text-success me-1 small"></i> System Online v1.0
-                    </span>
                     <h1 class="fw-bold text-dark mb-2" style="font-size: 2.5rem;">Selamat Datang,</h1>
                     <h4 class="text-muted fw-light mb-4">di Portal Fixed Asset Management</h4>
                     <p class="text-secondary mb-5 px-md-5">

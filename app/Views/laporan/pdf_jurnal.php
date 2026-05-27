@@ -46,12 +46,12 @@
                 <th rowspan="2">UMUR MANFAAT</th>
                 <th colspan="2">PENYUSUTAN</th>
                 <th rowspan="2">PENYUSUTAN (PER BULAN)</th>
-                <th rowspan="2">AKUMULASI (ACCURATE)</th>
-                <th rowspan="2">AKUMULASI (KINGDEE)</th>
-                <th rowspan="2">SISA UMUR (ACC)</th>
-                <th rowspan="2">SISA UMUR (KGD)</th>
-                <th rowspan="2">NILAI SISA (ACC)</th>
-                <th rowspan="2">NILAI SISA (KGD)</th>
+                <th rowspan="2">PENYUSUTAN (ACCURATE)</th>
+                <th rowspan="2">PENYUSUTAN (KINGDEE)</th>
+                <th rowspan="2">SISA UMUR (ACCURATE)</th>
+                <th rowspan="2">SISA UMUR (KINGDEE)</th>
+                <th rowspan="2">NILAI SISA (ACCURATE)</th>
+                <th rowspan="2">NILAI SISA (KINGDEE)</th>
             </tr>
             <tr>
                 <th>TARIF</th>

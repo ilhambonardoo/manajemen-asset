@@ -15,7 +15,7 @@
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
-                    <thead class="table-dark">
+                    <thead class="table-yellow">
                         <tr>
                             <th width="5%">No</th>
                             <th width="20%">Kode Aset</th>

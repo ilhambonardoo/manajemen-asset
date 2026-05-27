@@ -99,6 +99,19 @@ body.login-page {
   margin-bottom: 1rem;
 }
 
+.table-yellow {
+  --bs-table-bg: #ffd700;
+  --bs-table-color: #000;
+  --bs-table-border-color: #000;
+  color: var(--bs-table-color);
+  border-color: var(--bs-table-border-color);
+}
+
+.table-yellow th,
+.table-yellow td {
+  border: 1px solid #000 !important;
+}
+
 /* Mobile */
 @media (max-width: 768px) {
   body:not(.login-page) {

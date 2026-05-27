@@ -46,7 +46,7 @@
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
-                    <thead class="table-dark">
+                    <thead class="table-yellow">
                         <tr>
                             <th width="15%">Kode Ruangan</th>
                             <th width="50%">Nama Ruangan</th>

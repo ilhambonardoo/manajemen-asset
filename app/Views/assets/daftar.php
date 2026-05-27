@@ -36,7 +36,7 @@
         <div class="card-body">
             <div class="table-responsive">
                 <table id="tableAssets" class="table table-hover align-middle">
-                    <thead class="table-dark">
+                    <thead class="table-yellow">
                         <tr>
                             <?php if (session()->get('role_name') == 'Admin'): ?>
                                 <th class="text-center" width="50">

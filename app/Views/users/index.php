@@ -28,7 +28,7 @@
         <div class="card-body">
             <div class="table-responsive">
                 <table id="tableUsers" class="table table-hover align-middle">
-                    <thead class="table-dark">
+                    <thead class="table-yellow">
                         <tr>
                             <th>No</th>
                             <th>Username</th>

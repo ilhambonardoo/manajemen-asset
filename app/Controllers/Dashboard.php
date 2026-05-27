@@ -30,6 +30,8 @@ class Dashboard extends BaseController {
 				'harga_perolehan'
 			] ?? 0;
 
+		$totalHarga = $model->where('status_aktif', 1)->selectSum('harga_perolehan')->first()['harga_perolehan'] ?? 0;
+
 		$depAccurate = $valAccurate / (4 * 12);
 		$depKingdee = $valKingdee / (4 * 12);
 		$gapValue = $depAccurate - $depKingdee;
@@ -61,6 +63,7 @@ class Dashboard extends BaseController {
 			'title' => 'Dashboard Monitoring Aset',
 
 			'total_assets' => $totalAssets,
+			'totalHarga' => $totalHarga,
 			'depreciation_expense' => $depreciationExpense,
 			'assets_sold_disposed' => $inactiveAssets,
 			'gap_accurate_kingdee' => $gapValue,

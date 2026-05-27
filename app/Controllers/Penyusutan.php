@@ -16,6 +16,28 @@ class Penyusutan extends BaseController
 
 	public function index()
 	{
+		$data = $this->get_report_data();
+		return view('penyusutan/index', $data);
+	}
+
+	public function exportPdf()
+	{
+		$data = $this->get_report_data();
+
+		$dompdf = new \Dompdf\Dompdf();
+		$html = view('penyusutan/pdf', $data);
+
+		$dompdf->loadHtml($html);
+		$dompdf->setPaper('A4', 'landscape');
+		$dompdf->render();
+
+		$filename = 'Laporan-Penyusutan-' . date('YmdHis') . '.pdf';
+		$dompdf->stream($filename, ['Attachment' => 1]);
+		exit();
+	}
+
+	private function get_report_data()
+	{
 		$tipeLaporan = $this->request->getGet('tipe') ?? 'bulanan';
 		$bulanPilih = $this->request->getGet('bulan') ?? date('n');
 		$tahunPilih = $this->request->getGet('tahun') ?? date('Y');
@@ -81,11 +103,6 @@ class Penyusutan extends BaseController
 			$nilaiBukuKingdee = max(0, $hargaPerolehan - $akumulasiKgd);
 
 			if ($tipeLaporan === 'tahunan') {
-				// Penyusutan tahun ini = beban per bulan * sisa umur (tapi maks 12 bulan atau sisa umur yang ada)
-				// Sesuai request: "nilai penysutan bulanan dikalikan sisa umur"
-				// Tapi ini biasanya untuk sisa penyusutan. 
-				// Mari kita asumsikan untuk laporan tahunan adalah sisa penyusutan yang akan datang atau penyusutan di tahun tersebut.
-				// Re-read: "nilai penysutan bulanan dikalikan sisa umur"
 				$penyusutanAccurate = $bebanPerBulan * $sisaUmurAccurate;
 				$penyusutanKingdee = $bebanPerBulan * $sisaUmurKingdee;
 			} else {
@@ -116,7 +133,7 @@ class Penyusutan extends BaseController
 			$totalNilaiBukuKgd += $nilaiBukuKingdee;
 		}
 
-		$data = [
+		return [
 			'title' => 'Laporan Penyusutan Aset',
 			'tipe_pilih' => $tipeLaporan,
 			'bulan_pilih' => $bulanPilih,
@@ -143,7 +160,5 @@ class Penyusutan extends BaseController
 			'total_nilai_buku_acc' => $totalNilaiBukuAcc,
 			'total_nilai_buku_kgd' => $totalNilaiBukuKgd,
 		];
-
-		return view('penyusutan/index', $data);
 	}
 }

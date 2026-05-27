@@ -38,6 +38,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 		$routes->get('detail/(:num)', 'Assets::detail/$1');
 		$routes->post('simpan-lokasi', 'Assets::simpanLokasi');
 		$routes->get('penyusutan', 'Penyusutan::index');
+		$routes->get('penyusutan/pdf', 'Penyusutan::exportPdf');
 	});
 
 	$routes->group('asset', ['filter' => 'role:Admin'], function ($routes) {

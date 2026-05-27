@@ -163,27 +163,86 @@ class Laporan extends BaseController
 			break;
 
 			case 'jurnal':
-				$bulanPilih = $request->getPost('bulan') ?? date('n');
-				$tahunPilih = $request->getPost('tahun') ?? date('Y');
+				$bulanPilih = (int) ($request->getPost('bulan') ?? date('n'));
+				$tahunPilih = (int) ($request->getPost('tahun') ?? date('Y'));
 
 				$targetDateStr = $tahunPilih . '-' . sprintf('%02d', $bulanPilih) . '-01';
 				$targetDate = new \DateTime($targetDateStr);
-				$tanggalAkhirBulan = date('t M Y', strtotime($targetDateStr));
 
 				$assets = $this->assetModel->where('status_aktif', 1)->findAll();
 
-				$hasilPenyusutan = $this->hitungPenyusutanBulanan($assets, $targetDate);
+				$bulanArray = [
+					1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni',
+					7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+				];
+
+				$dataPenyusutan = [];
+
+				foreach ($assets as $asset) {
+					$tanggalBeli = new \DateTime($asset['tanggal_perolehan']);
+					$hariBeli = (int) $tanggalBeli->format('d');
+					$hargaPerolehan = (float) $asset['harga_perolehan'];
+					$umurBulan = (int) $asset['umur_penyusutan'];
+					$bebanPerBulan = $umurBulan > 0 ? $hargaPerolehan / $umurBulan : 0;
+					$tarif = $umurBulan > 0 ? (100 / ($umurBulan / 12)) : 0;
+
+					// Accurate start logic
+					$startAccurate = clone $tanggalBeli;
+					$startAccurate->modify('first day of this month');
+					if ($hariBeli >= 16) {
+						$startAccurate->modify('+1 month');
+					}
+
+					// Kingdee start logic
+					$startKingdee = clone $tanggalBeli;
+					$startKingdee->modify('first day of this month');
+					$startKingdee->modify('+1 month');
+
+					// Calculate accumulated months for target month
+					$bulanJalanAcc = 0;
+					if ($targetDate >= $startAccurate) {
+						$diff = $startAccurate->diff($targetDate);
+						$bulanJalanAcc = $diff->y * 12 + $diff->m + 1;
+					}
+					$bulanJalanAcc = min($bulanJalanAcc, $umurBulan);
+
+					$bulanJalanKgd = 0;
+					if ($targetDate >= $startKingdee) {
+						$diff = $startKingdee->diff($targetDate);
+						$bulanJalanKgd = $diff->y * 12 + $diff->m + 1;
+					}
+					$bulanJalanKgd = min($bulanJalanKgd, $umurBulan);
+
+					$accDep = $bulanJalanAcc * $bebanPerBulan;
+					$kgdDep = $bulanJalanKgd * $bebanPerBulan;
+
+					$dataPenyusutan[] = [
+						'nama' => $asset['nama_aset'],
+						'nilai_buku' => $hargaPerolehan,
+						'umur' => $umurBulan,
+						'tarif' => number_format($tarif, 1, ',', '.') . '%',
+						'metode' => 'GARIS LURUS',
+						'beban_bln' => $bebanPerBulan,
+						'dep_acc' => $accDep,
+						'dep_kgd' => $kgdDep,
+						'sisa_umur_acc' => max(0, $umurBulan - $bulanJalanAcc),
+						'sisa_umur_kgd' => max(0, $umurBulan - $bulanJalanKgd),
+						'nilai_sisa_acc' => max(0, $hargaPerolehan - $accDep),
+						'nilai_sisa_kgd' => max(0, $hargaPerolehan - $kgdDep),
+					];
+				}
 
 				$dataLaporan = [
-					'jurnal' => $hasilPenyusutan['jurnal_data'],
-					'total_jurnal' => $hasilPenyusutan['total_jurnal'],
-					'periode_bulan' => $bulanPilih,
-					'periode_tahun' => $tahunPilih,
-					'tanggal_akhir' => $tanggalAkhirBulan,
+					'title' => 'Laporan Daftar Penyusutan Aset Tetap',
+					'data_penyusutan' => $dataPenyusutan,
+					'tipe_pilih' => 'bulanan', // Always monthly for Jurnal based on context
+					'bulan_pilih' => $bulanPilih,
+					'tahun_pilih' => $tahunPilih,
+					'bulan_array' => $bulanArray,
 				];
 
 				$viewLaporan = 'laporan/pdf_jurnal';
-				$namaFile = 'Jurnal_Penyesuaian_' . $tahunPilih . '_' . sprintf('%02d', $bulanPilih);
+				$namaFile = 'Laporan_Penyusutan_' . $tahunPilih . '_' . sprintf('%02d', $bulanPilih);
 			break;
 			
 			case 'laporan_aset':

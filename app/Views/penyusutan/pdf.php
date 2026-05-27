@@ -43,12 +43,12 @@
     <table class="table">
         <thead>
             <tr>
-                <th rowspan="2">No</th>
-                <th rowspan="2">Kode Aset</th>
+                <th rowspan="2" style="width: 30px;">No</th>
+                <th rowspan="2" style="width: 80px;">Kode Aset</th>
                 <th rowspan="2">Nama Aset</th>
                 <th colspan="2">Sisa Umur (Bln)</th>
                 <th colspan="2">Nilai Buku</th>
-                <th colspan="3">Penyusutan <?= $tipe_pilih == 'tahunan' ? 'Sampai Selesai' : 'Bulan Ini' ?></th>
+                <th colspan="3">Penyusutan <?= $tipe_pilih == 'tahunan' ? 'Tahun ' . $tahun_pilih : 'Bulan Ini' ?></th>
             </tr>
             <tr>
                 <th>Accurate</th>

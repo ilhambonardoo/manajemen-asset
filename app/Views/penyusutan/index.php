@@ -77,10 +77,7 @@
                             <th rowspan="2" class="align-middle text-start">Nama Aset</th>
                             <th colspan="2" class="align-middle">Sisa Umur (Bln)</th>
                             <th colspan="2" class="align-middle">Nilai Buku</th>
-                            <?php if (($tipe_pilih ?? 'bulanan') == 'tahunan'): ?>
-                                <th rowspan="2" class="align-middle">Penyusutan / Bln</th>
-                            <?php endif; ?>
-                            <th colspan="3">Penyusutan <?= ($tipe_pilih ?? 'bulanan') == 'tahunan' ? 'Sampai Selesai' : 'Bulan Ini' ?></th>
+                            <th colspan="3">Penyusutan <?= ($tipe_pilih ?? 'bulanan') == 'tahunan' ? 'Tahun ' . $tahun_pilih : 'Bulan Ini' ?></th>
                         </tr>
                         <tr>
                             <th class="bg-secondary text-white border-end border-white">Accurate</th>
@@ -123,10 +120,6 @@
                                         Rp <?= number_format($row['nilai_buku_kgd'], 0, ',', '.') ?>
                                     </td>
 
-                                    <?php if (($tipe_pilih ?? 'bulanan') == 'tahunan'): ?>
-                                        <td class="text-end fw-bold text-dark">Rp <?= number_format($row['penyusutan_per_bulan'], 0, ',', '.') ?></td>
-                                    <?php endif; ?>
-
                                     <td class="text-success fw-bold align-middle text-end">Rp <?= number_format($row['accurate'], 0, ',', '.') ?></td>
                                     <td class="text-info text-dark fw-bold align-middle text-end">Rp <?= number_format($row['kingdee'], 0, ',', '.') ?></td>
 
@@ -145,7 +138,7 @@
                     <?php if (!empty($data_penyusutan)): ?>
                     <tfoot>
                         <tr class="table-dark fw-bold text-end">
-                            <td colspan="<?= ($tipe_pilih ?? 'bulanan') == 'tahunan' ? '8' : '7' ?>" class="text-uppercase align-middle text-center border-end border-light">Total Keseluruhan</td>
+                            <td colspan="7" class="text-uppercase align-middle text-center border-end border-light">Total Keseluruhan</td>
                             <td class="align-middle text-center border-end border-light">Rp <?= number_format($total_accurate, 0, ',', '.') ?></td>
                             <td class="align-middle text-center border-end border-light">Rp <?= number_format($total_kingdee, 0, ',', '.') ?></td>
                             <td class="<?= $total_selisih > 0 ? 'text-danger' : 'text-success' ?> align-middle text-center border-end border-dark">

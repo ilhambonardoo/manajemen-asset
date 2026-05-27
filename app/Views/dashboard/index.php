@@ -19,7 +19,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <p class="text-muted mb-1 text-uppercase fw-bold" style="font-size: 0.75rem;">Total Assets</p>
-                            <h3 class="fw-bold text-dark mb-0">  
+                            <h3 class="fw-bold text-dark mb-0 fs-4">  
                                 Rp <?= number_format($totalHarga, 0, ',', '.')?>
                             </h3>
                         </div>
@@ -37,7 +37,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <p class="text-muted mb-1 text-uppercase fw-bold" style="font-size: 0.75rem;">Depr. Expense (Month)</p>
-                            <h3 class="fw-bold text-dark mb-0">Rp <?= number_format(
+                            <h3 class="fw-bold text-dark mb-0 fs-4">Rp <?= number_format(
                             	$depreciation_expense,
                             	0,
                             	',',
@@ -58,7 +58,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <p class="text-muted mb-1 text-uppercase fw-bold" style="font-size: 0.75rem;">Assets Disposed</p>
-                            <h3 class="fw-bold text-dark mb-0"><?= number_format($assets_sold_disposed) ?> units</h3>
+                            <h3 class="fw-bold text-dark mb-0 fs-4"><?= number_format($assets_sold_disposed) ?> units</h3>
                         </div>
                         <div class="icon-circle bg-light text-dark rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
                             <i class="fas fa-hand-holding-usd fa-lg"></i>
@@ -76,7 +76,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <p class="text-muted mb-1 text-uppercase fw-bold" style="font-size: 0.75rem;">Gap (Accurate vs Kingdee)</p>
-                            <h3 class="fw-bold mb-0 <?= $gap_accurate_kingdee != 0 ? 'text-danger' : 'text-success' ?>">
+                            <h3 class="fw-bold mb-0 fs-4 <?= $gap_accurate_kingdee != 0 ? 'text-danger' : 'text-success' ?>">
                                 Rp <?= number_format($gap_accurate_kingdee, 0, ',', '.') ?>
                             </h3>
                         </div>

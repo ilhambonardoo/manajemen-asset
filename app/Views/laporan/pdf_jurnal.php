@@ -1,147 +1,85 @@
-<?= $this->extend('layouts/pdf_layout') ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><?= $title ?></title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 8pt;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .table th, .table td {
+            border: 1px solid #000;
+            padding: 4px;
+        }
+        .table th {
+            background-color: #f2f2f2;
+        }
+        .text-center { text-align: center; }
+        .text-end { text-align: right; }
+        .text-right { text-align: right; }
+        .fw-bold { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2 style="margin-bottom: 5px;">LAPORAN DAFTAR PENYUSUTAN ASET TETAP</h2>
+        <p style="margin: 0;">
+            Periode: <?= $bulan_array[$bulan_pilih] ?? '' ?> <?= $tahun_pilih ?>
+        </p>
+    </div>
 
-<?= $this->section('title') ?>
-<?= $judul ?? 'Journal Voucher' ?>
-<?= $this->endSection() ?>
-
-<?= $this->section('header_right') ?>
-<h2 class="report-title">Journal Voucher</h2>
-<p width="35%" style="text-align:right;">Voucher No : JV-<?= date('Ymd') ?>-01 </p>
-<p style="text-align:right;">Date : <?= date('d M Y', strtotime($tanggal_akhir ?? date('Y-m-d'))) ?> </p>
-<?= $this->endSection() ?>
-
-<?php
-function terbilang($angka)
-{
-    $angka = (int) $angka;
-    $bilangan = [
-        '',
-        'satu',
-        'dua',
-        'tiga',
-        'empat',
-        'lima',
-        'enam',
-        'tujuh',
-        'delapan',
-        'sembilan',
-        'sepuluh',
-        'sebelas'
-    ];
-
-    if ($angka == 0) {
-        return 'nol';
-    }
-
-    if ($angka < 0) {
-        return "minus " . terbilang(-1 * $angka);
-    }
-
-    if ($angka < 12) {
-        return $bilangan[$angka];
-    } elseif ($angka < 20) {
-        return terbilang($angka - 10) . " belas";
-    } elseif ($angka < 100) {
-        return terbilang(intdiv($angka, 10)) . " puluh" . ($angka % 10 ? " " . terbilang($angka % 10) : "");
-    } elseif ($angka < 1000) {
-        return terbilang(intdiv($angka, 100)) . " ratus" . ($angka % 100 ? " " . terbilang($angka % 100) : "");
-    } elseif ($angka < 1000000) {
-        return terbilang(intdiv($angka, 1000)) . " ribu" . ($angka % 1000 ? " " . terbilang($angka % 1000) : "");
-    } elseif ($angka < 1000000000) {
-        return terbilang(intdiv($angka, 1000000)) . " juta" . ($angka % 1000000 ? " " . terbilang($angka % 1000000) : "");
-    } elseif ($angka < 1000000000000) {
-        return terbilang(intdiv($angka, 1000000000)) . " miliar" . ($angka % 1000000000 ? " " . terbilang($angka % 1000000000) : "");
-    } else {
-        return terbilang(intdiv($angka, 1000000000000)) . " triliun" . ($angka % 1000000000000 ? " " . terbilang($angka % 1000000000000) : "");
-    }
-}
-?>
-
-<?= $this->section('content') ?>
-<style>
-    .table-jurnal {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 12px;
-        margin-bottom: 20px;
-    }
-
-    .table-jurnal th,
-    .table-jurnal td {
-        border: 1px solid #000;
-        padding: 6px 8px;
-    }
-
-    .table-jurnal th {
-        font-weight: bold;
-        text-align: center;
-        background-color: #f9f9f9;
-    }
-</style>
-
-<table class="table-jurnal">
-    <thead>
-        <tr>
-            <th width="15%">Account No.</th>
-            <th width="30%">Account Name</th>
-            <th width="15%">Debit</th>
-            <th width="15%">Credit</th>
-            <th width="25%">Memo</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php if (empty($jurnal)): ?>
+    <table class="table">
+        <thead>
             <tr>
-                <td colspan="5" class="text-center">Tidak ada aset yang disusutkan pada periode ini.</td>
+                <th rowspan="2">NAMA ASET</th>
+                <th rowspan="2">NILAI BUKU</th>
+                <th rowspan="2">UMUR MANFAAT</th>
+                <th colspan="2">PENYUSUTAN</th>
+                <th rowspan="2">PENYUSUTAN (PER BULAN)</th>
+                <th rowspan="2">AKUMULASI (ACCURATE)</th>
+                <th rowspan="2">AKUMULASI (KINGDEE)</th>
+                <th rowspan="2">SISA UMUR (ACC)</th>
+                <th rowspan="2">SISA UMUR (KGD)</th>
+                <th rowspan="2">NILAI SISA (ACC)</th>
+                <th rowspan="2">NILAI SISA (KGD)</th>
             </tr>
-        <?php else: ?>
-            <?php
-            $kode_beban = 6000;
-            $kode_akumulasi = 1500;
-            foreach ($jurnal as $kategori => $nominal):
-
-                $kode_beban++;
-                $kode_akumulasi++;
-            ?>
-                <tr>
-                    <td class="text-center"><?= $kode_beban ?>.01</td>
-                    <td>Beban Penyusutan - <?= $kategori ?></td>
-                    <td class="text-right"><?= number_format($nominal, 0, ',', '.') ?></td>
-                    <td class="text-right">0</td>
-                    <td>Penyusutan <?= $kategori ?> periode <?= date(
-                                                                'M Y',
-                                                                strtotime($tanggal_akhir ?? date('Y-m-d'))
-                                                            ) ?></td>
-                </tr>
-                <tr>
-                    <td class="text-center"><?= $kode_akumulasi ?>.01</td>
-                    <td>Akumulasi Penyusutan - <?= $kategori ?></td>
-                    <td class="text-right">0</td>
-                    <td class="text-right"><?= number_format($nominal, 0, ',', '.') ?></td>
-                    <td>Penyusutan <?= $kategori ?> periode <?= date(
-                                                                'M Y',
-                                                                strtotime($tanggal_akhir ?? date('Y-m-d'))
-                                                            ) ?></td>
-                </tr>
-            <?php
-            endforeach;
-            ?>
-
             <tr>
-                <td colspan="2" class="fw-bold">Terbilang: <i><?= ucfirst(terbilang($total_jurnal ?? 0)) ?> rupiah</i></td>
-                <td class="text-right fw-bold"><?= number_format($total_jurnal ?? 0, 0, ',', '.') ?></td>
-                <td class="text-right fw-bold"><?= number_format($total_jurnal ?? 0, 0, ',', '.') ?></td>
-                <td></td>
+                <th>TARIF</th>
+                <th>METODE</th>
             </tr>
-        <?php endif; ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <?php foreach ($data_penyusutan as $row): ?>
+                <tr>
+                    <td><?= $row['nama'] ?></td>
+                    <td class="text-end"><?= number_format($row['nilai_buku'], 0, ',', '.') ?></td>
+                    <td class="text-center"><?= $row['umur'] ?></td>
+                    <td class="text-center"><?= $row['tarif'] ?></td>
+                    <td class="text-center"><?= $row['metode'] ?></td>
+                    <td class="text-end"><?= number_format($row['beban_bln'], 0, ',', '.') ?></td>
+                    <td class="text-end"><?= number_format($row['dep_acc'], 0, ',', '.') ?></td>
+                    <td class="text-end"><?= number_format($row['dep_kgd'], 0, ',', '.') ?></td>
+                    <td class="text-center"><?= $row['sisa_umur_acc'] ?></td>
+                    <td class="text-center"><?= $row['sisa_umur_kgd'] ?></td>
+                    <td class="text-end"><?= number_format($row['nilai_sisa_acc'], 0, ',', '.') ?></td>
+                    <td class="text-end"><?= number_format($row['nilai_sisa_kgd'], 0, ',', '.') ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 
-<div class="description-box">
-    <p class="fw-bold" style="margin-bottom: 5px;">Description</p>
-    <p style="margin: 0;">Pencatatan Jurnal Penyesuaian Beban Penyusutan Aset Tetap Perusahaan untuk periode <?= date(
-                                                                                                                    'F Y',
-                                                                                                                    strtotime($tanggal_akhir ?? date('Y-m-d'))
-                                                                                                                ) ?>.</p>
-</div>
-<?= $this->endSection() ?>
+    <div style="margin-top: 30px;">
+        <p>Dicetak pada: <?= date('d F Y H:i:s') ?></p>
+    </div>
+</body>
+</html>

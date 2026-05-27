@@ -27,7 +27,7 @@
                                     <option value="">-- Pilih Laporan --</option>
                                     <option value="keseluruhan" <?= (isset($current_jenis) && $current_jenis == 'keseluruhan') ? 'selected' : '' ?>>Laporan Daftar Aset Tetap</option>
                                     <option value="kartu_aset" <?= (isset($current_jenis) && $current_jenis == 'kartu_aset') ? 'selected' : '' ?>>Kartu Aset Tetap (Per Aset)</option>
-                                    <option value="jurnal" <?= (isset($current_jenis) && $current_jenis == 'jurnal') ? 'selected' : '' ?>>Jurnal Penyesuaian Penyusutan</option>
+                                    <option value="jurnal" <?= (isset($current_jenis) && $current_jenis == 'jurnal') ? 'selected' : '' ?>>Laporan daftar penyusutan asset tetap</option>
                                     <option value="lokasi" <?= (isset($current_jenis) && $current_jenis == 'lokasi') ? 'selected' : '' ?>>Laporan Aset Per Lokasi</option>
                                     <option value="nonaktif" <?= (isset($current_jenis) && $current_jenis == 'nonaktif') ? 'selected' : '' ?>>Laporan Aset Nonaktif (Disposed)</option>
                                     <option value="laporan_aset" <?= (isset($current_jenis) && $current_jenis == 'laporan_aset') ? 'selected' : '' ?>>Laporan Aset (Perolehan, Penyusutan, dll)</option>

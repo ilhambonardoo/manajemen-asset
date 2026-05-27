@@ -70,7 +70,7 @@
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover align-middle" id="dataTable">
-                    <thead class="table-dark text-center">
+                    <thead class="table-yellow text-center">
                         <tr>
                             <th rowspan="2" class="align-middle">No</th>
                             <th rowspan="2" class="align-middle">Kode Aset</th>
@@ -137,11 +137,11 @@
                     </tbody>
                     <?php if (!empty($data_penyusutan)): ?>
                     <tfoot>
-                        <tr class="table-dark fw-bold text-end">
-                            <td colspan="7" class="text-uppercase align-middle text-center border-end border-light">Total Keseluruhan</td>
-                            <td class="align-middle text-center border-end border-light">Rp <?= number_format($total_accurate, 0, ',', '.') ?></td>
-                            <td class="align-middle text-center border-end border-light">Rp <?= number_format($total_kingdee, 0, ',', '.') ?></td>
-                            <td class="<?= $total_selisih > 0 ? 'text-danger' : 'text-success' ?> align-middle text-center border-end border-dark">
+                        <tr class="table-yellow fw-bold text-end">
+                            <td colspan="7" class="text-uppercase align-middle text-center">Total Keseluruhan</td>
+                            <td class="align-middle text-center">Rp <?= number_format($total_accurate, 0, ',', '.') ?></td>
+                            <td class="align-middle text-center">Rp <?= number_format($total_kingdee, 0, ',', '.') ?></td>
+                            <td class="<?= $total_selisih > 0 ? 'text-danger' : 'text-success' ?> align-middle text-center">
                                 <?php if ($total_selisih > 0): ?>
                                     <i class="fas fa-exclamation-triangle me-1"></i>
                                 <?php endif; ?>

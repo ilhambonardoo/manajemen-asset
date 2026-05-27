@@ -30,7 +30,7 @@ $judul_halaman = $jenis_approval == 'penghentian' ? 'Approval Penghentian Aset' 
         <div class="card-body p-4">
             <div class="table-responsive">
                 <table class="table table-hover align-middle" id="tableApproval">
-                    <thead class="table-dark">
+                    <thead class="table-yellow">
                         <tr>
                             <th>No</th>
                             <th>Kode Aset</th>

@@ -27,10 +27,18 @@
                                     <option value="">-- Pilih Laporan --</option>
                                     <option value="keseluruhan" <?= (isset($current_jenis) && $current_jenis == 'keseluruhan') ? 'selected' : '' ?>>Laporan Daftar Aset Tetap</option>
                                     <option value="kartu_aset" <?= (isset($current_jenis) && $current_jenis == 'kartu_aset') ? 'selected' : '' ?>>Kartu Aset Tetap (Per Aset)</option>
-                                    <option value="jurnal" <?= (isset($current_jenis) && $current_jenis == 'jurnal') ? 'selected' : '' ?>>Laporan daftar penyusutan asset tetap</option>
+                                    <option value="jurnal" <?= (isset($current_jenis) && $current_jenis == 'jurnal') ? 'selected' : '' ?>>Laporan Penyusutan Asset Tetap</option>
                                     <option value="lokasi" <?= (isset($current_jenis) && $current_jenis == 'lokasi') ? 'selected' : '' ?>>Laporan Aset Per Lokasi</option>
                                     <option value="nonaktif" <?= (isset($current_jenis) && $current_jenis == 'nonaktif') ? 'selected' : '' ?>>Laporan Aset Nonaktif (Disposed)</option>
                                     <option value="laporan_aset" <?= (isset($current_jenis) && $current_jenis == 'laporan_aset') ? 'selected' : '' ?>>Laporan Aset (Perolehan, Penyusutan, dll)</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-4 filter-group" id="filter_sub_nonaktif" style="display: none;">
+                                <label class="form-label fw-bold">Jenis Nonaktif</label>
+                                <select class="form-select border-primary" name="sub_jenis">
+                                    <option value="penjualan">Penjualan Aset</option>
+                                    <option value="penghentian">Penghentian Aset</option>
                                 </select>
                             </div>
 
@@ -128,11 +136,13 @@
                 $('#filter_aset').fadeIn();
             } else if (jenis === 'lokasi') {
                 $('#filter_lokasi').fadeIn();
-            } else if (jenis === 'nonaktif') {}
+            } else if (jenis === 'nonaktif') {
+                $('#filter_sub_nonaktif').fadeIn();
+            }
             loadPreview();
         });
 
-        $('select[name="bulan"], input[name="tahun"], select[name="asset_id"], select[name="lokasi"]').change(function() {
+        $('select[name="bulan"], input[name="tahun"], select[name="asset_id"], select[name="lokasi"], select[name="sub_jenis"]').change(function() {
             loadPreview();
         });
 

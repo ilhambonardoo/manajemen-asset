@@ -41,6 +41,7 @@
     <table class="table">
         <thead>
             <tr>
+                <th rowspan="2" width="3%">NO</th>
                 <th rowspan="2">NAMA ASET</th>
                 <th rowspan="2">NILAI BUKU</th>
                 <th rowspan="2">UMUR MANFAAT</th>
@@ -59,8 +60,11 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($data_penyusutan as $row): ?>
+            <?php 
+            $no = 1;
+            foreach ($data_penyusutan as $row): ?>
                 <tr>
+                    <td class="text-center"><?= $no++ ?></td>
                     <td><?= $row['nama'] ?></td>
                     <td class="text-end"><?= number_format($row['nilai_buku'], 0, ',', '.') ?></td>
                     <td class="text-center"><?= $row['umur'] ?></td>

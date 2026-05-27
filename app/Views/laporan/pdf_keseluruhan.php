@@ -62,8 +62,8 @@
 
 <div class="description-box">
     <p class="fw-bold" style="margin-bottom: 5px;">Keterangan</p>
-    <p style="margin: 0;">Laporan ini mencakup seluruh aset tetap yang terdaftar per tanggal <?= date(
-    	'd F Y',
+    <p style="margin: 0;">Laporan ini mencakup aset tetap yang diperoleh pada periode bulan <?= date(
+    	'F Y',
     	strtotime($tanggal_akhir ?? date('Y-m-d'))
     ) ?>.</p>
 </div>

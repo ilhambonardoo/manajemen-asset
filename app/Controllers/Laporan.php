@@ -130,10 +130,15 @@ class Laporan extends BaseController
 				$tanggalAkhirBulan = date('t F Y', strtotime($targetDateStr));
 
 				$dataLaporan = [
-					'data' => $this->assetModel->where('status_aktif', 1)->findAll()
+					'data' => $this->assetModel
+						->where('MONTH(tanggal_perolehan)', $bulanPilih)
+						->where('YEAR(tanggal_perolehan)', $tahunPilih)
+						->where('status_aktif', 1)
+						->findAll(),
+					'tanggal_akhir' => $tanggalAkhirBulan
 				];
 				$viewLaporan = 'laporan/pdf_keseluruhan';
-				$namaFile = 'Laporan_Aset_Keseluruhan_' . date('Ymd');
+				$namaFile = 'Laporan_Aset_Periode_' . $tahunPilih . '_' . sprintf('%02d', $bulanPilih);
 			break;
 
 			case 'kartu_aset':
@@ -155,11 +160,27 @@ class Laporan extends BaseController
 			break;
 
 			case 'nonaktif':
+				$subJenis = $request->getPost('sub_jenis') ?? 'penjualan';
+				
+				$query = $this->penjualanAssetModel
+					->table('penjualan_assets')
+					->select('penjualan_assets.*, assets.kode_aset, assets.nama_aset, assets.harga_perolehan, assets.kelompok_aset, assets.tanggal_perolehan, assets.lokasi_aset, assets.umur_penyusutan')
+					->join('assets', 'assets.id = penjualan_assets.asset_id')
+					->where('status_approval', 'Approved');
+
+				if ($subJenis == 'penjualan') {
+					$query->where('jenis_pengajuan', 'penjualan');
+					$namaFile = 'Laporan_Penjualan_Aset_' . date('Ymd');
+				} else {
+					$query->where('jenis_pengajuan', 'penghentian');
+					$namaFile = 'Laporan_Penghentian_Aset_' . date('Ymd');
+				}
+
 				$dataLaporan = [
-					'data' => $this->assetModel->where('status_aktif', 0)->findAll()
+					'data' => $query->get()->getResultArray(),
+					'sub_jenis' => $subJenis
 				];
 				$viewLaporan = 'laporan/pdf_nonaktif';
-				$namaFile = 'Laporan_Aset_Nonaktif_' . date('Ymd');
 			break;
 
 			case 'jurnal':

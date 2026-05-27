@@ -9,7 +9,7 @@
 
     <a href="/" class="brand-link text-center" style="background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.1);">
         <i class="fas fa-building text-warning me-2"></i>
-        <span class="brand-text font-weight-bold" >Asset QPON</span>
+        <span class="brand-text font-weight-bold" >Asset PT XYZ</span>
     </a>
 
     <div class="sidebar px-2">

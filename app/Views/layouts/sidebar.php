@@ -102,7 +102,7 @@
                         <li class="nav-item">
                             <a href="<?= base_url('laporan?jenis=jurnal') ?>" class="nav-link <?= ($_GET['jenis'] ?? '') == 'jurnal'? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Jurnal Penyusutan</p>
+                                <p>Laporan daftar penyusutan asset tetap</p>
                             </a>
                         </li>
                         <li class="nav-item">

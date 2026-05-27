@@ -102,7 +102,7 @@
                         <li class="nav-item">
                             <a href="<?= base_url('laporan?jenis=jurnal') ?>" class="nav-link <?= ($_GET['jenis'] ?? '') == 'jurnal'? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Laporan daftar penyusutan asset tetap</p>
+                                <p>Laporan Penyusutan Aset Tetap</p>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -115,6 +115,12 @@
                             <a href="<?= base_url('laporan?jenis=lokasi') ?>" class="nav-link <?= (($_GET['jenis'] ?? '') == 'lokasi') ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Laporan Lokasi</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url('laporan?jenis=nonaktif') ?>" class="nav-link <?= ($segment1 == 'laporan' && ($_GET['jenis'] ?? '') == 'nonaktif') ? 'active' : '' ?>">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Laporan Aset Nonaktif</p>
                             </a>
                         </li>
                         <li class="nav-item">

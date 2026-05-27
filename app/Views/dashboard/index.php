@@ -19,7 +19,9 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <p class="text-muted mb-1 text-uppercase fw-bold" style="font-size: 0.75rem;">Total Assets</p>
-                            <h3 class="fw-bold text-dark mb-0"><?= number_format($total_assets) ?></h3>
+                            <h3 class="fw-bold text-dark mb-0">  
+                                Rp <?= number_format($totalHarga, 0, ',', '.')?>
+                            </h3>
                         </div>
                         <div class="icon-circle bg-light text-dark rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
                             <i class="fas fa-boxes fa-lg"></i>

@@ -168,8 +168,11 @@ class Laporan extends BaseController
 
 				$targetDateStr = $tahunPilih . '-' . sprintf('%02d', $bulanPilih) . '-01';
 				$targetDate = new \DateTime($targetDateStr);
+				$lastDayOfPeriodStr = date('Y-m-t', strtotime($targetDateStr));
 
-				$assets = $this->assetModel->where('status_aktif', 1)->findAll();
+				$assets = $this->assetModel->where('status_aktif', 1)
+					->where('tanggal_perolehan <=', $lastDayOfPeriodStr)
+					->findAll();
 
 				$bulanArray = [
 					1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni',

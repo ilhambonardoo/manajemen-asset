@@ -6,7 +6,7 @@
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="h3 text-dark fw-bold mb-0"><i class="fas fa-calculator text-primary me-2"></i> Laporan Penyusutan Aset</h2>
+            <h2 class="h3 text-dark fw-bold mb-0"><i class="fas fa-calculator text-primary me-2"></i>Penyusutan Aset</h2>
             <p class="text-muted mb-0">Lakukan penyusutan aset berdasarkan periode bulan dan tahun.</p>
         </div>
     </div>
@@ -41,9 +41,14 @@
                         min="2000" max="2099">
                 </div>
                 <div class="col-md-3">
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="fas fa-filter me-1"></i> Tampilkan Laporan
-                    </button>
+                    <div class="btn-group w-100 gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-filter me-1"></i> Tampilkan
+                        </button>
+                        <a href="<?= base_url('asset/penyusutan/pdf?' . http_build_query($_GET)) ?>" class="btn btn-danger" target="_blank">
+                            <i class="fas fa-file-pdf me-1"></i> Cetak PDF
+                        </a>
+                    </div>
                 </div>
             </form>
         </div>

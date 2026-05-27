@@ -15,22 +15,6 @@
 
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label class="form-label fw-bold">Nama Aset</label>
-                                <input type="text" class="form-control" name="nama_aset" 
-                                       value="<?= old('nama_aset', $asset['nama_aset']) ?>" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="umur_penyusutan" class="form-label fw-bold">Umur Ekonomis (Bulan)</label>
-                                <input type="number" class="form-control" id="umur_penyusutan" name="umur_penyusutan" 
-                                       value="<?= old(
-                                       	'umur_penyusutan',
-                                       	$asset['umur_penyusutan']
-                                       ) ?>" readonly required>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6">
                                 <label class="form-label fw-bold">Kategori</label>
                                 <select class="form-select" id="kelompok_aset" name="kelompok_aset" required>
                                     <option value="" disabled>-- Pilih Kategori --</option>
@@ -64,6 +48,23 @@
                                     ) ?>">
                                 </div>
                                 <small class="text-muted">Prefix otomatis sesuai kategori.</small>
+                            </div>
+                        </div>
+
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Nama Aset</label>
+                                <input type="text" class="form-control" name="nama_aset" 
+                                       value="<?= old('nama_aset', $asset['nama_aset']) ?>" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="umur_penyusutan" class="form-label fw-bold">Umur Ekonomis (Bulan)</label>
+                                <input type="number" class="form-control" id="umur_penyusutan" name="umur_penyusutan" 
+                                       value="<?= old(
+                                       	'umur_penyusutan',
+                                       	$asset['umur_penyusutan']
+                                       ) ?>" readonly required>
                             </div>
                         </div>
 

@@ -15,20 +15,6 @@
 
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <label for="nama_aset" class="form-label fw-bold">Nama Aset</label>
-                                <input type="text" class="form-control" id="nama_aset" name="nama_aset" 
-                                       placeholder="Cth: Laptop ASUS ROG" value="<?= old('nama_aset') ?>" required>
-                            </div>
-                             <div class="col-md-6">
-                                <label for="umur_penyusutan" class="form-label fw-bold">Umur Ekonomis (Bulan)</label>
-                                <input type="number" class="form-control" id="umur_penyusutan" name="umur_penyusutan" placeholder="Otomatis terisi..." value="<?= old(
-                                	'umur_penyusutan'
-                                ) ?>" readonly required>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6">
                                 <label for="kelompok_aset" class="form-label fw-bold">Kategori</label>
                                 <select class="form-select" id="kelompok_aset" name="kelompok_aset" required>
                                     <option value="" selected disabled>-- Pilih Kategori --</option>
@@ -60,11 +46,24 @@
                                     	'kode_aset'
                                     ) ?>">
                                 </div>
-                                <small class="text-muted">Kode asset auto terisi, silahkan pilih kategori terlebih dahulu!</small>
+                                <small class="text-muted">Kode asset auto terisi!</small>
                             </div>
                         </div>
 
 
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="nama_aset" class="form-label fw-bold">Nama Aset</label>
+                                <input type="text" class="form-control" id="nama_aset" name="nama_aset" 
+                                       placeholder="Cth: Laptop ASUS ROG" value="<?= old('nama_aset') ?>" required>
+                            </div>
+                             <div class="col-md-6">
+                                <label for="umur_penyusutan" class="form-label fw-bold">Umur Ekonomis (Bulan)</label>
+                                <input type="number" class="form-control" id="umur_penyusutan" name="umur_penyusutan" placeholder="Otomatis terisi..." value="<?= old(
+                                	'umur_penyusutan'
+                                ) ?>" readonly required>
+                            </div>
+                        </div>
 
                         <div class="row mb-3">
                             <div class="col-md-4">

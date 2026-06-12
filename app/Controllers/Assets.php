@@ -123,6 +123,7 @@ class Assets extends BaseController
 			'kode_aset' => $this->request->getPost('kode_aset'),
 			'nama_aset' => $this->request->getPost('nama_aset'),
 			'kelompok_aset' => $this->request->getPost('kelompok_aset'),
+			'harga_satuan' => $this->request->getPost('harga_satuan'),
 			'harga_perolehan' => $this->request->getPost('harga_perolehan'),
 			'umur_penyusutan' => $this->request->getPost('umur_penyusutan'),
 			'tanggal_perolehan' => $this->request->getPost('tanggal_perolehan'),

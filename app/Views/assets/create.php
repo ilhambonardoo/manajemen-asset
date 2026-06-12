@@ -31,8 +31,9 @@
                                     	: '' ?>>Furniture (Metal)</option>
                                     <option value="booth" <?= old('kelompok_aset') == 'booth'
                                     	? 'selected'
-                                    	: '' ?>>Booth</option>
-                                </select>
+                                    	: '' ?>>Booth</option>                                    <option value="intangible asset" <?= old('kelompok_aset') == 'intangible asset'
+                                     	? 'selected'
+                                     	: '' ?>>Intangible Asset</option>                                </select>
                             </div>
                             <div class="col-md-6">
                                 <label for="kode_aset" class="form-label fw-bold">Kode Aset</label>
@@ -367,6 +368,9 @@
             } else if (kategori === 'booth') {
                 umur = 96;
                 prefix = 'BTH';
+            } else if (kategori === 'intangible asset') {
+                umur = 96;
+                prefix = 'INT';
             }
 
             if(umur) umurInput.value = umur;

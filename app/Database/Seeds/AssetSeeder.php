@@ -37,7 +37,7 @@ class AssetSeeder extends Seeder {
 		];
 
 		// Sesuai ENUM di Migration
-		$categories = ['office equipment', 'furniture/fixture (non metal)', 'furniture/fixture (metal)', 'booth'];
+		$categories = ['office equipment', 'furniture/fixture (non metal)', 'furniture/fixture (metal)', 'booth', 'intangible asset'];
 
 		// Sesuai ENUM di Migration
 		$sources = ['Accurate', 'Kingdee', 'Manual Input'];
@@ -64,8 +64,12 @@ class AssetSeeder extends Seeder {
 			$unitPrice = rand(1, 15) * 1000000;
 			$totalPrice = $qty * $unitPrice;
 
-			// Tentukan umur penyusutan (elektronik 48 bln, furniture 96 bln)
-			$usefulLife = $catRand == 'office equipment' ? 48 : 96;
+			// Tentukan umur penyusutan sesuai kategori aset
+			if ($catRand == 'office equipment') {
+				$usefulLife = 48;
+			} else {
+				$usefulLife = 96;
+			}
 
 			$data[] = [
 				'kode_aset' => 'AST-' . str_pad($i, 4, '0', STR_PAD_LEFT), // Hasil: AST-0001

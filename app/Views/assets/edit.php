@@ -31,8 +31,9 @@
                                     	: '' ?>>Furniture (Metal)</option>
                                     <option value="booth" <?= $asset['kelompok_aset'] == 'booth'
                                     	? 'selected'
-                                    	: '' ?>>Booth</option>
-                                </select>
+                                    	: '' ?>>Booth</option>                                    <option value="intangible asset" <?= $asset['kelompok_aset'] == 'intangible asset'
+                                     	? 'selected'
+                                     	: '' ?>>Intangible Asset</option>                                </select>
                             </div>
                             <div class="col-md-6">
                                 <label for="kode_aset" class="form-label fw-bold">Kode Aset</label>
@@ -158,19 +159,17 @@
         
         const totalPerolehanDisplay = document.getElementById('harga_perolehan_display');
         const totalPerolehanHidden = document.getElementById('harga_perolehan');
-
+        
         function formatRupiah(angka) {
-            let number_string = angka.toString().replace(/[^,\d]/g, ''),
-                split = number_string.split(','),
-                sisa = split[0].length % 3,
-                rupiah = split[0].substr(0, sisa),
-                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-            if (ribuan) {
-                separator = sisa ? '.' : '';
-                rupiah += separator + ribuan.join('.');
+            if (!angka) return '';
+            
+            let stringAngka = angka.toString();
+            if (stringAngka.includes('.')) {
+                stringAngka = stringAngka.split('.')[0];
             }
-            return split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            let nomor = stringAngka.replace(/\D/g, '');
+            
+            return new Intl.NumberFormat('id-ID').format(nomor);
         }
 
         function hitungTotal() {
@@ -180,12 +179,11 @@
             let total = harga * jumlah;
 
             if(totalPerolehanHidden) totalPerolehanHidden.value = total;
-            
-            if(totalPerolehanDisplay) totalPerolehanDisplay.value = formatRupiah(total.toString());
+            if(totalPerolehanDisplay) totalPerolehanDisplay.value = formatRupiah(total);
         }
 
         if(hargaSatuanDisplay) {
-            hargaSatuanDisplay.addEventListener('input', function(e) {
+                hargaSatuanDisplay.addEventListener('input', function(e) {
                 let rawValue = this.value.replace(/\D/g, ''); 
                 
                 this.value = formatRupiah(rawValue);
@@ -194,8 +192,13 @@
 
                 hitungTotal();
             });
-            
+
             if(hargaSatuanHidden.value) {
+                let nilaiAwal = hargaSatuanHidden.value;
+                if (nilaiAwal.includes('.')) {
+                    nilaiAwal = nilaiAwal.split('.')[0];
+                }
+                hargaSatuanHidden.value = nilaiAwal.replace(/\D/g, '');
                 hargaSatuanDisplay.value = formatRupiah(hargaSatuanHidden.value);
             }
         }
@@ -241,6 +244,9 @@
             } else if (kategori === 'booth') {
                 umur = 96;
                 prefix = 'BTH';
+            } else if (kategori === 'intangible asset') {
+                umur = 96;
+                prefix = 'INT';
             }
 
             if(umur) umurInput.value = umur;

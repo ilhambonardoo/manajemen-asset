@@ -29,6 +29,7 @@ class CreateAssetsTable extends Migration {
 					'furniture/fixture (non metal)',
 					'furniture/fixture (metal)',
 					'booth',
+					'intangible asset',
 				],
 			],
 			'jumlah_aset' => [

@@ -138,7 +138,7 @@ class Laporan extends BaseController
 					'tanggal_akhir' => $tanggalAkhirBulan
 				];
 				$viewLaporan = 'laporan/pdf_keseluruhan';
-				$namaFile = 'Laporan_Aset_Periode_' . $tahunPilih . '_' . sprintf('%02d', $bulanPilih);
+				$namaFile = 'Laporan_Aset_Periode_' . date('Ymd');
 			break;
 
 			case 'kartu_aset':

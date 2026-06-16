@@ -9,7 +9,7 @@
 
     <a href="/" class="brand-link text-center" style="background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.1);">
         <i class="fas fa-building text-warning me-2"></i>
-        <span class="brand-text font-weight-bold" >Asset PT XYZ</span>
+        <span class="brand-text font-weight-bold">Asset PT XYZ</span>
     </a>
 
     <div class="sidebar px-2">
@@ -23,7 +23,7 @@
                     </a>
                 </li>
 
-                <?php if (in_array($role, ['Admin', 'Supervisor', 'Staff Finance', 'Manager', 'Tim China'])): ?>
+                <?php if (in_array($role, ['Admin', 'Supervisor', 'Staff Finance', 'Staff Accounting', 'Staff GA'])): ?>
                     <li class="nav-header" style="color: rgba(255,255,255,0.5); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 15px 10px 5px 15px;">
                         Manajemen Aset
                     </li>
@@ -36,7 +36,7 @@
                     </li>
                 <?php endif; ?>
 
-                <?php if (in_array($role, ['Admin', 'Supervisor', 'Staff Finance'])): ?>
+                <?php if (in_array($role, ['Admin'])): ?>
                     <li class="nav-item">
                         <a href="<?= base_url('lokasi') ?>" class="nav-link <?= ($segment1 == 'lokasi') ? 'active' : '' ?>" style="border-radius: 8px; transition: all 0.3s ease;">
                             <i class="nav-icon fas fa-map-marked-alt"></i>
@@ -45,7 +45,7 @@
                     </li>
                 <?php endif; ?>
 
-                <?php if (in_array($role, ['Admin', 'Supervisor'])): ?>
+                <?php if (in_array($role, ['Admin', 'Supervisor', 'Staff Accounting'])): ?>
                     <li class="nav-item">
                         <a href="<?= base_url('asset/penyusutan') ?>" class="nav-link <?= ($segment1 == 'asset' && $segment2 == 'penyusutan') ? 'active' : '' ?>" style="border-radius: 8px; transition: all 0.3s ease;">
                             <i class="nav-icon fas fa-chart-line"></i>
@@ -99,24 +99,31 @@
                                 <p>Laporan Daftar Aset Tetap</p>
                             </a>
                         </li>
+                        
+                        <?php if (in_array($role, ['Admin', 'Manager', 'Supervisor', 'Staff Accounting', 'Staff Finance'])): ?>
                         <li class="nav-item">
                             <a href="<?= base_url('laporan?jenis=jurnal') ?>" class="nav-link <?= ($_GET['jenis'] ?? '') == 'jurnal'? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Laporan Penyusutan Aset Tetap</p>
+                                <p>Laporan Penyusutan Aset</p>
                             </a>
                         </li>
+                        
                         <li class="nav-item">
                             <a href="<?= base_url('laporan?jenis=kartu_aset') ?>" class="nav-link <?= (($_GET['jenis'] ?? '') == 'kartu_aset') ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Kartu Aset</p>
                             </a>
                         </li>
+                        <?php endif; ?>
+                        
                         <li class="nav-item">
                             <a href="<?= base_url('laporan?jenis=lokasi') ?>" class="nav-link <?= (($_GET['jenis'] ?? '') == 'lokasi') ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Laporan Lokasi</p>
                             </a>
                         </li>
+                        
+                        <?php if (in_array($role, ['Admin', 'Manager', 'Supervisor', 'Staff Accounting', 'Staff Finance'])): ?>
                         <li class="nav-item">
                             <a href="<?= base_url('laporan?jenis=nonaktif') ?>" class="nav-link <?= ($segment1 == 'laporan' && ($_GET['jenis'] ?? '') == 'nonaktif') ? 'active' : '' ?>">
                                 <i class="far fa-circle nav-icon"></i>
@@ -129,6 +136,7 @@
                                 <p>Laporan Aset (Gabungan)</p>
                             </a>
                         </li>
+                        <?php endif; ?>
                     </ul>
                 </li>
 

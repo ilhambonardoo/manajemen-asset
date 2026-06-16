@@ -7,20 +7,30 @@ use CodeIgniter\Database\Seeder;
 class RoleSeeder extends Seeder {
 	public function run() {
 		$data = [
-			['role_name' => 'Admin', 'description' => 'Mengelola seluruh data, user, dan approval '],
 			[
-				'role_name' => 'Supervisor',
-				'description' => 'Input/edit aset, kelola penyusutan dan perbaikan ',
+				'role_name' => 'Admin',
+				'description' => 'Full access, user management, approve all data'
 			],
 			[
 				'role_name' => 'Manager',
-				'description' => 'Approval penjualan/penghentian dan view laporan',
+				'description' => 'Read reports, approve asset sales and termination'
+			],
+			[
+				'role_name' => 'Supervisor',
+				'description' => 'Read-only: view asset list, depreciation values, and reports'
 			],
 			[
 				'role_name' => 'Staff Finance',
-				'description' => 'Input perolehan dan update data, tanpa akses hapus ',
+				'description' => 'CRUD assets: input acquisition, view, edit, delete assets'
 			],
-			['role_name' => 'Tim China', 'description' => 'View data, laporan, dan penyusutan saja'],
+			[
+				'role_name' => 'Staff Accounting',
+				'description' => 'Manage asset list, depreciation and variances, propose asset sales/termination'
+			],
+			[
+				'role_name' => 'Staff GA',
+				'description' => 'Read-only: view asset list and asset location reports'
+			],
 		];
 		$this->db->table('roles')->insertBatch($data);
 	}

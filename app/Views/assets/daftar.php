@@ -17,7 +17,7 @@
                     <i class="fas fa-trash-alt me-1"></i> Hapus Terpilih
                 </button>
             <?php endif; ?>
-            <?php if (in_array(session()->get('role_name'), ['Admin', 'Supervisor', 'Staff Finance'])): ?>
+            <?php if (in_array(session()->get('role_name'), ['Admin', 'Staff Finance'])): ?>
                 <a href="<?= base_url('asset/create') ?>" class="btn btn-warning fw-bold">
                     <i class="fas fa-plus me-1"></i> Tambah Aset Baru
                 </a>
@@ -93,8 +93,8 @@
                                         <?php if (
                                         	in_array(session()->get('role_name'), [
                                         		'Admin',
-                                        		'Supervisor',
                                         		'Staff Finance',
+                                                'Staff Accounting'
                                         	])
                                         ): ?>
                                             <a href="<?= base_url(
@@ -102,12 +102,11 @@
                                             ) ?>" class="btn btn-sm btn-outline-primary" title="Edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-                                            <a href="<?= base_url(
-                                            	'asset/detail/' . $item['id']
-                                            ) ?>" class="btn btn-sm btn-outline-info" title="Detail & Kelola Aset">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
                                         <?php endif; ?>
+                                        
+                                        <a href="<?= base_url('asset/detail/' . $item['id']) ?>" class="btn btn-sm btn-outline-info" title="Detail & Kelola Aset">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
 
                                         <?php if (in_array($item['id'], $pending_ids)): ?>
                                             <span class="badge bg-warning text-dark py-2 w-100" title="Menunggu Approval Admin">
@@ -118,20 +117,17 @@
                                         	$item['status_aktif'] == 1 &&
                                         	in_array(session()->get('role_name'), [
                                         		'Admin',
-                                        		'Supervisor',
-                                        		'Staff Finance',
+                                                'Staff Accounting'
                                         	])
                                         ): ?>
                                             <button type="button" class="btn btn-sm btn-outline-warning btn-ajukan" data-bs-toggle="modal" data-bs-target="#ajukanModal" data-id="<?= $item[
                                             	'id'
-                                            ] ?>" data-nama="<?= $item[
-	'nama_aset'
-] ?>" title="Ajukan Penjualan/Pelepasan">
+                                            ] ?>" data-nama="<?= $item['nama_aset'] ?>" title="Ajukan Penjualan/Pelepasan">
                                                 <i class="fas fa-hand-holding-usd"></i>
                                             </button>
                                         <?php endif; ?>
 
-                                        <?php if (session()->get('role_name') == 'Admin'): ?>
+                                        <?php if (in_array(session()->get('role_name'), ['Admin', 'Staff Finance', 'Staff Accounting'])): ?>
                                             <button type="button" class="btn btn-sm btn-outline-danger btn-delete" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="<?= $item[
                                             	'id'
                                             ] ?>" title="Hapus">

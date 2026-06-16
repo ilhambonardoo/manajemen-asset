@@ -63,9 +63,11 @@
         <div class="tab-pane fade show active" id="lokasi" role="tabpanel">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h5 class="fw-bold">Riwayat Perpindahan Lokasi</h5>
+                <?php if(in_array(session()->get('role_name'), ['Admin'])): ?>
                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#pindahLokasiModal">
                     <i class="fas fa-exchange-alt me-1"></i> Pindahkan Lokasi
                 </button>
+                <?php endif; ?>
             </div>
             
             <div class="table-responsive">

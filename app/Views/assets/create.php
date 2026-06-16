@@ -18,22 +18,12 @@
                                 <label for="kelompok_aset" class="form-label fw-bold">Kategori</label>
                                 <select class="form-select" id="kelompok_aset" name="kelompok_aset" required>
                                     <option value="" selected disabled>-- Pilih Kategori --</option>
-                                    <option value="office equipment" <?= old('kelompok_aset') == 'office equipment'
-                                    	? 'selected'
-                                    	: '' ?>>Office Equipment</option>
-                                    <option value="furniture/fixture (non metal)" <?= old('kelompok_aset') ==
-                                    'furniture/fixture (non metal)'
-                                    	? 'selected'
-                                    	: '' ?>>Furniture (Non-Metal)</option>
-                                    <option value="furniture/fixture (metal)" <?= old('kelompok_aset') ==
-                                    'furniture/fixture (metal)'
-                                    	? 'selected'
-                                    	: '' ?>>Furniture (Metal)</option>
-                                    <option value="booth" <?= old('kelompok_aset') == 'booth'
-                                    	? 'selected'
-                                    	: '' ?>>Booth</option>                                    <option value="intangible asset" <?= old('kelompok_aset') == 'intangible asset'
-                                     	? 'selected'
-                                     	: '' ?>>Intangible Asset</option>                                </select>
+                                    <option value="office equipment" <?= old('kelompok_aset') == 'office equipment' ? 'selected' : '' ?>>Office Equipment</option>
+                                    <option value="furniture/fixture (non metal)" <?= old('kelompok_aset') == 'furniture/fixture (non metal)' ? 'selected' : '' ?>>Furniture (Non-Metal)</option>
+                                    <option value="furniture/fixture (metal)" <?= old('kelompok_aset') == 'furniture/fixture (metal)' ? 'selected' : '' ?>>Furniture (Metal)</option>
+                                    <option value="booth" <?= old('kelompok_aset') == 'booth' ? 'selected' : '' ?>>Booth</option>                                    
+                                    <option value="intangible asset" <?= old('kelompok_aset') == 'intangible asset' ? 'selected' : '' ?>>Intangible Asset</option>                                
+                                </select>
                             </div>
                             <div class="col-md-6">
                                 <label for="kode_aset" class="form-label fw-bold">Kode Aset</label>
@@ -369,7 +359,7 @@
                 umur = 96;
                 prefix = 'BTH';
             } else if (kategori === 'intangible asset') {
-                umur = 96;
+                umur = 48;
                 prefix = 'INT';
             }
 

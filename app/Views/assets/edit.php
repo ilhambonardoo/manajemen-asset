@@ -245,7 +245,7 @@
                 umur = 96;
                 prefix = 'BTH';
             } else if (kategori === 'intangible asset') {
-                umur = 96;
+                umur = 48;
                 prefix = 'INT';
             }
 

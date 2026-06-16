@@ -114,218 +114,242 @@ class Laporan extends BaseController
 	}
 
 	private function getReportData($request)
-	{
-		$jenisLaporan = $request->getPost('jenis_laporan');
-		$dataLaporan = [];
-		$viewLaporan = '';
-		$namaFile = '';
-		$tanggalAkhirBulan = date('d F Y');
+    {
+        $jenisLaporan = $request->getPost('jenis_laporan');
+        $dataLaporan = [];
+        $viewLaporan = '';
+        $namaFile = '';
+        $tanggalAkhirBulan = date('d F Y');
 
-		switch ($jenisLaporan) {
-			case 'keseluruhan':
-				$bulanPilih = $request->getPost('bulan') ?? date('n');
-				$tahunPilih = $request->getPost('tahun') ?? date('Y');
+        $bulanPilih = $request->getPost('bulan');
+        $tahunPilih = $request->getPost('tahun');
 
-				$targetDateStr = $tahunPilih . '-' . sprintf('%02d', $bulanPilih) . '-01';
-				$tanggalAkhirBulan = date('t F Y', strtotime($targetDateStr));
+        switch ($jenisLaporan) {
+            case 'keseluruhan':
+                $query = $this->assetModel->where('status_aktif', 1);
 
-				$dataLaporan = [
-					'data' => $this->assetModel
-						->where('MONTH(tanggal_perolehan)', $bulanPilih)
-						->where('YEAR(tanggal_perolehan)', $tahunPilih)
-						->where('status_aktif', 1)
-						->findAll(),
-					'tanggal_akhir' => $tanggalAkhirBulan
-				];
-				$viewLaporan = 'laporan/pdf_keseluruhan';
-				$namaFile = 'Laporan_Aset_Periode_' . date('Ymd');
-			break;
+                if(!empty($bulanPilih) && !empty($tahunPilih)){
+                    $query->where('MONTH(tanggal_perolehan)', $bulanPilih)
+                          ->where('YEAR(tanggal_perolehan)', $tahunPilih);
+                    $targetDateStr = $tahunPilih . '-' . sprintf('%02d', $bulanPilih) . '-01';
+                    $tanggalAkhirBulan = date('t F Y', strtotime($targetDateStr));
+                } else {
+                    $tanggalAkhirBulan = date('t F Y'); 
+                }
 
-			case 'kartu_aset':
-				$assetId = $request->getPost('asset_id');
-				$dataLaporan = [
-					'asset' => $this->assetModel->find($assetId)
-				];
-				$viewLaporan = 'laporan/pdf_kartu_aset';
-				$namaFile = 'Kartu_Aset_' . ($dataLaporan['asset']['kode_aset'] ?? 'Unknown');
-			break;
+                $dataLaporan = [
+                    'data' => $query->findAll(), // Menggunakan $query dinamis, bukan instansiasi ulang statis
+                    'tanggal_akhir' => $tanggalAkhirBulan
+                ];
+                $viewLaporan = 'laporan/pdf_keseluruhan';
+                $namaFile = 'Laporan_Aset_Periode_' . date('Ymd');
+            break;
 
-			case 'lokasi':
-				$lokasiPilih = $request->getPost('lokasi');
-				$dataLaporan = [
-					'data' => $this->assetModel->where('lokasi_aset', $lokasiPilih)->findAll()
-				];
-				$viewLaporan = 'laporan/pdf_lokasi';
-				$namaFile = 'Laporan_Aset_Lokasi_' . str_replace(' ', '_', $lokasiPilih);
-			break;
+            case 'kartu_aset':
+                $assetId = $request->getPost('asset_id');
+                $dataLaporan = [
+                    'asset' => $this->assetModel->find($assetId)
+                ];
+                $viewLaporan = 'laporan/pdf_kartu_aset';
+                $namaFile = 'Kartu_Aset_' . ($dataLaporan['asset']['kode_aset'] ?? 'Unknown');
+            break;
 
-			case 'nonaktif':
-				$subJenis = $request->getPost('sub_jenis') ?? 'penjualan';
-				
-				$query = $this->penjualanAssetModel
-					->table('penjualan_assets')
-					->select('penjualan_assets.*, assets.kode_aset, assets.nama_aset, assets.harga_perolehan, assets.kelompok_aset, assets.tanggal_perolehan, assets.lokasi_aset, assets.umur_penyusutan')
-					->join('assets', 'assets.id = penjualan_assets.asset_id')
-					->where('status_approval', 'Approved');
+            case 'lokasi':
+                $lokasiPilih = $request->getPost('lokasi');
+                $dataLaporan = [
+                    'data' => $this->assetModel->where('lokasi_aset', $lokasiPilih)->findAll()
+                ];
+                $viewLaporan = 'laporan/pdf_lokasi';
+                $namaFile = 'Laporan_Aset_Lokasi_' . str_replace(' ', '_', $lokasiPilih);
+            break;
 
-				if ($subJenis == 'penjualan') {
-					$query->where('jenis_pengajuan', 'penjualan');
-					$namaFile = 'Laporan_Penjualan_Aset_' . date('Ymd');
-				} else {
-					$query->where('jenis_pengajuan', 'penghentian');
-					$namaFile = 'Laporan_Penghentian_Aset_' . date('Ymd');
-				}
+            case 'nonaktif':
+                $subJenis = $request->getPost('sub_jenis') ?? 'penjualan';
+                
+                $query = $this->penjualanAssetModel
+                    ->table('penjualan_assets')
+                    ->select('penjualan_assets.*, assets.kode_aset, assets.nama_aset, assets.harga_perolehan, assets.kelompok_aset, assets.tanggal_perolehan, assets.lokasi_aset, assets.umur_penyusutan')
+                    ->join('assets', 'assets.id = penjualan_assets.asset_id')
+                    ->where('status_approval', 'Approved');
 
-				$dataLaporan = [
-					'data' => $query->get()->getResultArray(),
-					'sub_jenis' => $subJenis
-				];
-				$viewLaporan = 'laporan/pdf_nonaktif';
-			break;
+                if ($subJenis == 'penjualan') {
+                    $query->where('jenis_pengajuan', 'penjualan');
+                    $namaFile = 'Laporan_Penjualan_Aset_' . date('Ymd');
+                } else {
+                    $query->where('jenis_pengajuan', 'penghentian');
+                    $namaFile = 'Laporan_Penghentian_Aset_' . date('Ymd');
+                }
 
-			case 'jurnal':
-				$bulanPilih = (int) ($request->getPost('bulan') ?? date('n'));
-				$tahunPilih = (int) ($request->getPost('tahun') ?? date('Y'));
+                $dataLaporan = [
+                    'data' => $query->get()->getResultArray(),
+                    'sub_jenis' => $subJenis
+                ];
+                $viewLaporan = 'laporan/pdf_nonaktif';
+            break;
 
-				$targetDateStr = $tahunPilih . '-' . sprintf('%02d', $bulanPilih) . '-01';
-				$targetDate = new \DateTime($targetDateStr);
-				$lastDayOfPeriodStr = date('Y-m-t', strtotime($targetDateStr));
+            case 'jurnal':
+                // Jika bulan kosong (Semua Periode), gunakan bulan berjalan saat ini sebagai jangkar perhitungan
+                $bln = !empty($bulanPilih) ? (int)$bulanPilih : (int)date('n');
+                $thn = !empty($tahunPilih) ? (int)$tahunPilih : (int)date('Y');
 
-				$assets = $this->assetModel->where('status_aktif', 1)
-					->where('tanggal_perolehan <=', $lastDayOfPeriodStr)
-					->findAll();
+                $targetDateStr = $thn . '-' . sprintf('%02d', $bln) . '-01';
+                $targetDate = new \DateTime($targetDateStr);
+                $lastDayOfPeriodStr = date('Y-m-t', strtotime($targetDateStr));
 
-				$bulanArray = [
-					1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni',
-					7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
-				];
+                $assets = $this->assetModel->where('status_aktif', 1)
+                    ->where('tanggal_perolehan <=', $lastDayOfPeriodStr)
+                    ->findAll();
 
-				$dataPenyusutan = [];
+                $bulanArray = [
+                    1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni',
+                    7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+                ];
 
-				foreach ($assets as $asset) {
-					$tanggalBeli = new \DateTime($asset['tanggal_perolehan']);
-					$hariBeli = (int) $tanggalBeli->format('d');
-					$hargaPerolehan = (float) $asset['harga_perolehan'];
-					$umurBulan = (int) $asset['umur_penyusutan'];
-					$bebanPerBulan = $umurBulan > 0 ? $hargaPerolehan / $umurBulan : 0;
-					$tarif = $umurBulan > 0 ? (100 / ($umurBulan / 12)) : 0;
+                $dataPenyusutan = [];
 
-					// Accurate start logic
-					$startAccurate = clone $tanggalBeli;
-					$startAccurate->modify('first day of this month');
-					if ($hariBeli >= 16) {
-						$startAccurate->modify('+1 month');
-					}
+                foreach ($assets as $asset) {
+                    $tanggalBeli = new \DateTime($asset['tanggal_perolehan']);
+                    $hariBeli = (int) $tanggalBeli->format('d');
+                    $hargaPerolehan = (float) $asset['harga_perolehan'];
+                    $umurBulan = (int) $asset['umur_penyusutan'];
+                    $bebanPerBulan = $umurBulan > 0 ? $hargaPerolehan / $umurBulan : 0;
+                    $tarif = $umurBulan > 0 ? (100 / ($umurBulan / 12)) : 0;
 
-					// Kingdee start logic
-					$startKingdee = clone $tanggalBeli;
-					$startKingdee->modify('first day of this month');
-					$startKingdee->modify('+1 month');
+                    $startAccurate = clone $tanggalBeli;
+                    $startAccurate->modify('first day of this month');
+                    if ($hariBeli >= 16) {
+                        $startAccurate->modify('+1 month');
+                    }
 
-					// Calculate accumulated months for target month
-					$bulanJalanAcc = 0;
-					if ($targetDate >= $startAccurate) {
-						$diff = $startAccurate->diff($targetDate);
-						$bulanJalanAcc = $diff->y * 12 + $diff->m + 1;
-					}
-					$bulanJalanAcc = min($bulanJalanAcc, $umurBulan);
+                    $startKingdee = clone $tanggalBeli;
+                    $startKingdee->modify('first day of this month');
+                    $startKingdee->modify('+1 month');
 
-					$bulanJalanKgd = 0;
-					if ($targetDate >= $startKingdee) {
-						$diff = $startKingdee->diff($targetDate);
-						$bulanJalanKgd = $diff->y * 12 + $diff->m + 1;
-					}
-					$bulanJalanKgd = min($bulanJalanKgd, $umurBulan);
+                    $bulanJalanAcc = 0;
+                    if ($targetDate >= $startAccurate) {
+                        $diff = $startAccurate->diff($targetDate);
+                        $bulanJalanAcc = $diff->y * 12 + $diff->m + 1;
+                    }
+                    $bulanJalanAcc = min($bulanJalanAcc, $umurBulan);
 
-					$accDep = $bulanJalanAcc * $bebanPerBulan;
-					$kgdDep = $bulanJalanKgd * $bebanPerBulan;
+                    $bulanJalanKgd = 0;
+                    if ($targetDate >= $startKingdee) {
+                        $diff = $startKingdee->diff($targetDate);
+                        $bulanJalanKgd = $diff->y * 12 + $diff->m + 1;
+                    }
+                    $bulanJalanKgd = min($bulanJalanKgd, $umurBulan);
 
-					$dataPenyusutan[] = [
-						'nama' => $asset['nama_aset'],
-						'nilai_buku' => $hargaPerolehan,
-						'umur' => $umurBulan,
-						'tarif' => number_format($tarif, 1, ',', '.') . '%',
-						'metode' => 'GARIS LURUS',
-						'beban_bln' => $bebanPerBulan,
-						'dep_acc' => $accDep,
-						'dep_kgd' => $kgdDep,
-						'sisa_umur_acc' => max(0, $umurBulan - $bulanJalanAcc),
-						'sisa_umur_kgd' => max(0, $umurBulan - $bulanJalanKgd),
-						'nilai_sisa_acc' => max(0, $hargaPerolehan - $accDep),
-						'nilai_sisa_kgd' => max(0, $hargaPerolehan - $kgdDep),
-					];
-				}
+                    $accDep = $bulanJalanAcc * $bebanPerBulan;
+                    $kgdDep = $bulanJalanKgd * $bebanPerBulan;
 
-				$dataLaporan = [
-					'title' => 'Laporan Daftar Penyusutan Aset Tetap',
-					'data_penyusutan' => $dataPenyusutan,
-					'tipe_pilih' => 'bulanan', // Always monthly for Jurnal based on context
-					'bulan_pilih' => $bulanPilih,
-					'tahun_pilih' => $tahunPilih,
-					'bulan_array' => $bulanArray,
-				];
+                    $dataPenyusutan[] = [
+                        'nama' => $asset['nama_aset'],
+                        'nilai_buku' => $hargaPerolehan,
+                        'umur' => $umurBulan,
+                        'tarif' => number_format($tarif, 1, ',', '.') . '%',
+                        'metode' => 'GARIS LURUS',
+                        'beban_bln' => $bebanPerBulan,
+                        'dep_acc' => $accDep,
+                        'dep_kgd' => $kgdDep,
+                        'sisa_umur_acc' => max(0, $umurBulan - $bulanJalanAcc),
+                        'sisa_umur_kgd' => max(0, $umurBulan - $bulanJalanKgd),
+                        'nilai_sisa_acc' => max(0, $hargaPerolehan - $accDep),
+                        'nilai_sisa_kgd' => max(0, $hargaPerolehan - $kgdDep),
+                    ];
+                }
 
-				$viewLaporan = 'laporan/pdf_jurnal';
-				$namaFile = 'Laporan_Penyusutan_' . $tahunPilih . '_' . sprintf('%02d', $bulanPilih);
-			break;
-			
-			case 'laporan_aset':
-				$bulanPilih = $request->getPost('bulan') ?? date('n');
-				$tahunPilih = $request->getPost('tahun') ?? date('Y');
+                $dataLaporan = [
+                    'title' => 'Laporan Daftar Penyusutan Aset Tetap',
+                    'data_penyusutan' => $dataPenyusutan,
+                    'tipe_pilih' => empty($bulanPilih) ? 'tahunan' : 'bulanan', // Deteksi dinamis untuk template view
+                    'bulan_pilih' => $bln,
+                    'tahun_pilih' => $thn,
+                    'bulan_array' => $bulanArray,
+                ];
 
-				$targetDatestr  = $tahunPilih . '-' . sprintf('%02d', $bulanPilih) . '-01';
-				$targetDate  = new \DateTime($targetDatestr);
-				$targetakhirBulan = date('t F Y', strtotime($targetDatestr));
+                $viewLaporan = 'laporan/pdf_jurnal';
+                $namaFile = 'Laporan_Penyusutan_' . $thn . '_' . sprintf('%02d', $bln);
+            break;
+            
+            case 'laporan_aset':
+                $queryPerolehan = $this->assetModel->where('status_aktif', 1);
+            
+            // Create fresh model instances to avoid query builder state pollution
+            $penjualanModel = new PenjualanAssetModel();
+            $penghentianModel = new PenjualanAssetModel();
+            
+            $queryPenjualan = $penjualanModel
+                ->table('penjualan_assets')
+                ->select('penjualan_assets.*, assets.kode_aset, assets.nama_aset, assets.harga_perolehan')
+                ->join('assets', 'assets.id = penjualan_assets.asset_id')
+                ->where('jenis_pengajuan', 'penjualan')
+                ->where('status_approval', 'Approved');
 
-				$dataPerolehan = $this->assetModel->where('MONTH(tanggal_perolehan)', $bulanPilih)->where('YEAR(tanggal_perolehan)', $tahunPilih)->findAll();
+            $queryPenghentian = $penghentianModel
+                ->table('penjualan_assets')
+                ->select('penjualan_assets.*, assets.kode_aset, assets.nama_aset, assets.harga_perolehan')
+                ->join('assets', 'assets.id = penjualan_assets.asset_id')
+                ->where('jenis_pengajuan', 'penghentian')
+                ->where('status_approval', 'Approved');
+                
+                // Pastikan Tahun ada isinya, jika dikosongkan user gunakan tahun berjalan
+                $tahunJangkar = !empty($tahunPilih) ? $tahunPilih : date('Y');
 
-				$assets = $this->assetModel->where('status_aktif', 1)->findAll();
+                if(!empty($bulanPilih)){
+                    // Filter Bulanan Spesifik
+                    $queryPerolehan->where('MONTH(tanggal_perolehan)', $bulanPilih)->where('YEAR(tanggal_perolehan)', $tahunJangkar);
+                    $queryPenjualan->where('MONTH(penjualan_assets.tanggal_penjualan)', $bulanPilih)->where('YEAR(penjualan_assets.tanggal_penjualan)', $tahunJangkar);
+                    $queryPenghentian->where('MONTH(penjualan_assets.created_at)', $bulanPilih)->where('YEAR(penjualan_assets.created_at)', $tahunJangkar);
 
-				$hasilPenyusutan = $this->hitungPenyusutanBulanan($assets, $targetDate);
+                    $targetDatestr = $tahunJangkar . '-' . sprintf('%02d', $bulanPilih) . '-01';
+                    $targetDate = new \DateTime($targetDatestr);
+                    $tanggalAkhirBulan = date('t F Y', strtotime($targetDatestr));
+                } else {
+                    // Semua Periode (Bulan Kosong) -> Filter berdasarkan Tahun saja
+                    $queryPerolehan->where('YEAR(tanggal_perolehan)', $tahunJangkar);
+                    $queryPenjualan->where('YEAR(penjualan_assets.tanggal_penjualan)', $tahunJangkar);
+                    $queryPenghentian->where('YEAR(penjualan_assets.created_at)', $tahunJangkar);
+                    
+                    // Gunakan tanggal akhir tahun sebagai batas penentu parameter hitungPenyusutanBulanan
+                    $targetDate = new \DateTime($tahunJangkar . '-12-31');
+                    $tanggalAkhirBulan = '31 Desember ' . $tahunJangkar;
+                }
 
-				$penjualan = $this->penjualanAssetModel
-					->table('penjualan_assets')
-					->select('penjualan_assets.*, assets.kode_aset, assets.nama_aset, assets.harga_perolehan')
-					->join('assets', 'assets.id = penjualan_assets.asset_id')
-					->where('jenis_pengajuan', 'penjualan')
-					->where('status_approval', 'Approved')
-					->where('MONTH(penjualan_assets.tanggal_penjualan)', $bulanPilih)
-					->where('YEAR(penjualan_assets.tanggal_penjualan)', $tahunPilih)
-					->get()
-					->getResultArray();
+                $dataPerolehan = $queryPerolehan->findAll();
 
-				$dataPenghentian = $this->penjualanAssetModel
-					->table('penjualan_assets')
-					->select('penjualan_assets.*, assets.kode_aset, assets.nama_aset, assets.harga_perolehan')
-					->join('assets', 'assets.id = penjualan_assets.asset_id')
-					->where('jenis_pengajuan', 'penghentian')
-					->where('status_approval', 'Approved')
-					->where('MONTH(penjualan_assets.created_at)', $bulanPilih)
-					->where('YEAR(penjualan_assets.created_at)', $tahunPilih)
-					->get()
-					->getResultArray();
+                // Ambil aset yang diperoleh sebelum atau sama dengan tanggal jangkar targetDate
+                $assetsForPenyusutan = $this->assetModel->where('status_aktif', 1)
+                    ->where('tanggal_perolehan <=', $targetDate->format('Y-m-d'))
+                    ->findAll();
+                
+                // PANGGILAN FUNGSI: Pastikan $targetDate dikirim berupa Objek DateTime yang valid
+                $hasilPenyusutan = $this->hitungPenyusutanBulanan($assetsForPenyusutan, $targetDate);
+                
+                $penjualan = $queryPenjualan->get()->getResultArray();
+                $dataPenghentian = $queryPenghentian->get()->getResultArray();
 
-				$dataLaporan = [
-					'perolehan'=> $dataPerolehan,
-					'penyusutan' => $hasilPenyusutan,
-					'penjualan' => $penjualan,
-					'penghentian' => $dataPenghentian,
-					'tanggal' => date('d F Y'),
-					'tanggal_akhir' => $tanggalAkhirBulan,
-				];
-				$viewLaporan = 'laporan/pdf_laporan_aset';
-				$namaFile = 'Laporan_Aset_' . $tahunPilih . '_' . sprintf('%02d', $bulanPilih);
-			break;
+                $dataLaporan = [
+                    'perolehan'     => $dataPerolehan,
+                    'penyusutan'    => $hasilPenyusutan,
+                    'penjualan'     => $penjualan,
+                    'penghentian'   => $dataPenghentian,
+                    'tanggal'       => date('d F Y'),
+                    'tanggal_akhir' => $tanggalAkhirBulan,
+                ];
+                
+                $viewLaporan = 'laporan/pdf_laporan_aset';
+                $namaFile = 'Laporan_Aset_' . $tahunJangkar . '_' . (!empty($bulanPilih) ? sprintf('%02d', $bulanPilih) : 'SemuaBulan');           
+            break;
 
-		default:
-			return null;
-		}
+        default:
+            return null;
+        }
 
-		return [
-			'view' => $viewLaporan,
-			'filename' => $namaFile,
-			'data' => array_merge($dataLaporan, [
-				'judul' => 'Laporan Aset',
-			])];
-	}
+        return [
+            'view' => $viewLaporan,
+            'filename' => $namaFile,
+            'data' => array_merge($dataLaporan, [
+                'judul' => 'Laporan Aset',
+            ])];
+    }
 }

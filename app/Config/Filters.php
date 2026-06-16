@@ -3,6 +3,7 @@
 namespace Config;
 
 use App\Filters\AuthFilter;
+use App\Filters\LaporanFilter;
 use App\Filters\RoleFilter;
 use CodeIgniter\Config\Filters as BaseFilters;
 use CodeIgniter\Filters\Cors;
@@ -37,6 +38,7 @@ class Filters extends BaseFilters {
 		'performance' => PerformanceMetrics::class,
 		'auth' => AuthFilter::class,
 		'role' => RoleFilter::class,
+		'laporan' => LaporanFilter::class,
 	];
 
 	/**

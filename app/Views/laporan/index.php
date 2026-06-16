@@ -46,6 +46,7 @@
                                 <label class="form-label fw-bold">Periode (Bulan & Tahun)</label>
                                 <div class="input-group">
                                     <select name="bulan" class="form-select">
+                                        <option value="">-- Semua priode --</option>
                                         <?php
                                         $bulan_array = [
                                             1 => 'Januari',
@@ -62,11 +63,11 @@
                                             12 => 'Desember',
                                         ];
                                         foreach ($bulan_array as $key => $val): ?>
-                                            <option value="<?= $key ?>" <?= (date('n') == $key) ? 'selected' : '' ?>><?= $val ?></option>
+                                            <option value="<?= $key ?>"> <?= $val ?> </option>
                                         <?php endforeach;
                                         ?>
                                     </select>
-                                    <input type="number" name="tahun" class="form-control" value="<?= date('Y') ?>">
+                                    <input type="number" name="tahun" class="form-control" value="<?= date('Y') ?>" placeholder="Tahun">
                                 </div>
                             </div>
 

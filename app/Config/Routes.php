@@ -25,7 +25,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('/dashboard', 'Dashboard::index');
 
 
-    $routes->group('', ['filter' => 'role:Admin,Supervisor,Staff Accounting,Staff GA'], function ($routes){
+    $routes->group('', ['filter' => 'role:Admin,Manager,Supervisor,Staff Accounting,Staff GA'], function ($routes){
         $routes->get('laporan', 'Laporan::index', ['filter' => 'laporan']);
         $routes->post('laporan/generate', 'Laporan::generate', ['filter' => 'laporan']);
         $routes->post('laporan/preview', 'Laporan::preview', ['filter' => 'laporan']);    

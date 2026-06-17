@@ -80,7 +80,7 @@
                     </li>
                 <?php endif; ?>
                 
-            <?php if(in_array($role, ['Admin, Manager', 'Supervisor', 'Staff Accounting', 'Staff GA'])): ?>
+            <?php if(in_array($role, ['Admin', 'Manager', 'Supervisor', 'Staff Accounting', 'Staff GA'])): ?>
                 <li class="nav-header" style="color: rgba(255,255,255,0.5); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; padding: 15px 10px 5px 15px;">
                     Laporan
                 </li>

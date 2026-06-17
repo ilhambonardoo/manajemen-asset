@@ -21,13 +21,19 @@ $routes->post('register/process', 'Auth::registerProcess');
 $routes->get('logout', 'Auth::logout');
 
 $routes->group('', ['filter' => 'auth'], function ($routes) {
+    
     $routes->get('/dashboard', 'Dashboard::index');
-    $routes->get('laporan', 'Laporan::index', ['filter' => 'laporan']);
-    $routes->post('laporan/generate', 'Laporan::generate', ['filter' => 'laporan']);
-    $routes->post('laporan/preview', 'Laporan::preview', ['filter' => 'laporan']);
+
+
+    $routes->group('', ['filter' => 'role:Admin,Supervisor,Staff Accounting,Staff GA'], function ($routes){
+        $routes->get('laporan', 'Laporan::index', ['filter' => 'laporan']);
+        $routes->post('laporan/generate', 'Laporan::generate', ['filter' => 'laporan']);
+        $routes->post('laporan/preview', 'Laporan::preview', ['filter' => 'laporan']);    
+    });
+    
     
     // Daftar aset tetap untuk Admin, Supervisor, Staff Finance, dan Staff Accounting
-    $routes->group('asset', ['filter' => 'role:Admin,Supervisor,Staff Finance,Staff Accounting,Staff GA'], function ($routes) {
+    $routes->group('asset', ['filter' => 'role:Admin,Supervisor,Staff Finance,Staff Accounting'], function ($routes) {
         $routes->get('daftar', 'Assets::index');
     });
 

@@ -5,7 +5,7 @@
     
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="h3 text-dark fw-bold border-start border-5 ps-3" style="border-color: #FFD700 !important;">
-            Executive Dashboard
+            Dashboard Aset Tetap
         </h2>
         <div class="text-muted">
             <i class="fas fa-calendar-alt me-1"></i> <?= date('d F Y') ?>
@@ -38,10 +38,10 @@
                         <div>
                             <p class="text-muted mb-1 text-uppercase fw-bold" style="font-size: 0.75rem;">Depr. Expense (Month)</p>
                             <h3 class="fw-bold text-dark mb-0 fs-4">Rp <?= number_format(
-                            	$depreciation_expense,
-                            	0,
-                            	',',
-                            	'.'
+                                $depreciation_expense,
+                                0,
+                                ',',
+                                '.'
                             ) ?></h3>
                         </div>
                         <div class="icon-circle bg-warning bg-opacity-10 text-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
@@ -70,8 +70,8 @@
 
         <div class="col-xl-3 col-md-6">
             <div class="card shadow-sm h-100 border-0 border-top border-4 <?= $gap_accurate_kingdee != 0
-            	? 'border-danger'
-            	: 'border-success' ?>">
+                ? 'border-danger'
+                : 'border-success' ?>">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
@@ -93,7 +93,7 @@
         <div class="col-lg-8">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-header bg-white py-3 mx-4 border-0">
-                    <h5 class="mb-0 fw-bold">Asset Acquisition Trend</h5>
+                    <h5 class="mb-0 fw-bold">Rekapitulasi Aset Tetap</h5>
                 </div>
                 <div class="card-body">
                     <canvas id="acquisitionChart" style="max-height: 350px;"></canvas>
@@ -104,7 +104,7 @@
         <div class="col-lg-4">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-header bg-white py-3 border-0">
-                    <h5 class="mb-0 fw-bold">Asset Status</h5>
+                    <h5 class="mb-0 fw-bold">Status Aset</h5>
                 </div>
                 <div class="card-body d-flex flex-column justify-content-center align-items-center">
                     <div style="width: 80%;">
@@ -119,7 +119,7 @@
         <div class="col-12">
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-white py-3 border-0">
-                    <h5 class="mb-0 fw-bold">Depreciation Comparison</h5>
+                    <h5 class="mb-0 fw-bold">Perbedaan Penyusutan Accurate dan Kingdee</h5>
                 </div>
                 <div class="card-body">
                     <canvas id="comparisonChart" style="max-height: 300px;"></canvas>
@@ -141,20 +141,23 @@
             }
         };
 
+        // Mengubah grafik tren akuisisi menjadi grafik batang (Bar Chart)
+       // Mengubah grafik tren akuisisi menjadi grafik batang (Bar Chart)
         const ctxAcq = document.getElementById('acquisitionChart').getContext('2d');
         new Chart(ctxAcq, {
-            type: 'line',
+            type: 'bar',
             data: {
                 labels: <?= $acquisition_labels ?? '[]' ?>,
                 datasets: [{
                     label: 'Asset Acquisition (Qty)',
                     data: <?= $acquisition_values ?? '[]' ?>,
-                    borderColor: '#000000', 
-                    backgroundColor: 'rgba(255, 215, 0, 0.2)', 
-                    borderWidth: 2,
-                    tension: 0.4,
-                    fill: true,
-                    pointBackgroundColor: '#FFD700'
+                    backgroundColor: '#FFD700', // Warna isi batang (Emas)
+                    borderColor: '#000000',     // Warna border batang (Hitam)
+                    borderWidth: 1,
+                    
+                    // --- TAMBAHKAN DUA BARIS INI UNTUK NGE-KECILIN BATANG ---
+                    barPercentage: 0.4,       // Semakin kecil nilainya (misal 0.3 atau 0.4), batang akan semakin langsing
+                    categoryPercentage: 0.8   // Mengatur jarak antar kelompok batang
                 }]
             },
             options: commonOptions
